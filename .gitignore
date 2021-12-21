@@ -34,6 +34,7 @@ build/
 
 !**/src/main/resources/application.properties
 application.properties
+!**/src/main/resources/keys/*
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
