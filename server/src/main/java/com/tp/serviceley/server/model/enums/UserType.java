@@ -1,11 +1,11 @@
-package com.tp.serviceley.server.model;
+package com.tp.serviceley.server.model.enums;
 
 public enum UserType {
     User("user"),
     Admin("admin"),
     Staff("staff");
 
-    public String type;
+    private String type;
 
     UserType(String type) {
         this.type = type;

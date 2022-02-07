@@ -1,11 +1,11 @@
-package com.tp.serviceley.server.model;
+package com.tp.serviceley.server.model.enums;
 
 public enum TokenType {
     AccountActivation("accountActivation"),
     PhoneVerificationOTP("phoneVerificationOTP"),
     EmailUpdateVerification("emailUpdateVerification");
 
-    public String type;
+    private String type;
 
     TokenType(String type) {
         this.type = type;

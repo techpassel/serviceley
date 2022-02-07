@@ -1,12 +1,12 @@
 package com.tp.serviceley.server.model;
 
+import com.tp.serviceley.server.model.enums.TokenType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
@@ -15,11 +15,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "token")
-public class VerificationToken {
+public class VerificationToken extends CreateUpdateRecord{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String token;
+    //We will use this field to store VerificationToken as well as OTP for phone verification.
 
     @NotEmpty
     @Column(name = "token_type")
@@ -33,9 +35,5 @@ public class VerificationToken {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 }
 

@@ -1,10 +1,9 @@
 package com.tp.serviceley.server.controller;
 
 import com.tp.serviceley.server.dto.LoginRequestDto;
-import com.tp.serviceley.server.dto.LoginResponseDto;
 import com.tp.serviceley.server.dto.SignupRequestDto;
 import com.tp.serviceley.server.exception.BackendException;
-import com.tp.serviceley.server.model.UserType;
+import com.tp.serviceley.server.model.enums.UserType;
 import com.tp.serviceley.server.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

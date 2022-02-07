@@ -1,5 +1,7 @@
 package com.tp.serviceley.server.model;
 
+import com.tp.serviceley.server.model.enums.Gender;
+import com.tp.serviceley.server.model.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,7 @@ import javax.validation.constraints.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
-public class User {
+public class User extends CreateUpdateRecord{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,7 +30,7 @@ public class User {
 
     @Column(unique = true)
     @Size(max = 10, min = 10)
-    private int phone;
+    private Integer phone;
 
     @Email(message = "Email should be valid")
     @NotEmpty(message = "Email is required")
@@ -37,6 +39,9 @@ public class User {
 
     @NotEmpty(message = "Password is required")
     private String password;
+
+    @NotNull
+    private Gender gender;
 
     @Column(name="is_active")
     @Size(max = 1)
