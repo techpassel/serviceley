@@ -122,7 +122,6 @@ public class AuthService {
         Optional<User> user = userRepository.findByEmail(loginRequestDto.getEmail());
         user.orElseThrow(() -> new BackendException("User not found."));
         User u = user.get();
-        return new LoginResponseDto(u.getFirstName(), u.getLastName(), u.getEmail(), u.getUserType().getType(), jwt);
+        return new LoginResponseDto(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getUserType().getType(), jwt);
     }
-
 }

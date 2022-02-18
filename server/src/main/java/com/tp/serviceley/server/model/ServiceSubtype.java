@@ -26,7 +26,7 @@ public class ServiceSubtype {
     @NotBlank
     private String subtype;
 
-    @Column(columnDefinition = "boolean default false")
+    @Column(name = "service_offering_type")
     private ServiceOfferingType serviceOfferingType;
     // Only Kitchen Cleaning and Cloth washing subtypes will be of type Additional and
     // Only Cooking subtype will be of type MainAndAdditional.
@@ -40,7 +40,7 @@ public class ServiceSubtype {
     private List<String> serviceDetails;
 
     @Column(name = "optional_services")
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<ServiceSubtype> optionalServices;
     // We will store list of optional services here that can be offered with this main service
     // For example- For "Home Cleaning" main service subtype, "Cooking", "Kitchen Cleaning" and "Cloth washing"
