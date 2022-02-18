@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "service_type")
 public class ServiceType {
     @Id
@@ -20,4 +19,8 @@ public class ServiceType {
 
     @NotBlank
     private String type;
+
+    public ServiceType(String type){
+        this.type = type;
+    }
 }

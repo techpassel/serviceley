@@ -28,7 +28,8 @@ public class AuthController {
                 signupRequestDto.setUserType(UserType.User);
             }
             authService.signup(signupRequestDto);
-            return new ResponseEntity<>("User registered successfully.", HttpStatus.OK);
+            return new ResponseEntity<>("User registered successfully.An activation email is sent " +
+                    "successfully on your registered email.Please verify your email.", HttpStatus.OK);
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){

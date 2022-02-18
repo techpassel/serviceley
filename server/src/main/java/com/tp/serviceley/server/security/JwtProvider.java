@@ -43,7 +43,8 @@ public class JwtProvider {
         alias — A name to uniquely identify the generated keypair entry within the generate keystore. Let’s use “jwtsigning”
         keyalg — Public key algorithm. Let's choose “RSA”.
         keystore — A name for the keystore file generated. Let’s use “keystore.jks”
-        keysize — Size (a measure of strength) of the generated public key. We should set that to 2048 at least. Can be set to 4096 for better security (to further reduce the possibility of an attacker guessing your keys).
+        keysize — Size (a measure of strength) of the generated public key. We should set that to 2048 at least.
+        Can be set to 4096 for better security (to further reduce the possibility of an attacker guessing your keys).
 
         So our final command to generate keystore file would be :
         ***************************************************************************************************
@@ -79,7 +80,6 @@ public class JwtProvider {
         try {
             return (PrivateKey) keyStore.getKey(keyAlias, privateKeyPassphrase.toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException  | UnrecoverableKeyException e) {
-            System.out.println(e.getMessage()+"1111111111111*****************");
             throw new BackendException("Exception occurred while retrieving private key from keystore", e);
         }
     }
@@ -88,7 +88,6 @@ public class JwtProvider {
         try {
             return keyStore.getCertificate(keyAlias).getPublicKey();
         } catch (KeyStoreException e) {
-            System.out.println(e.getMessage()+"*****");
             throw new BackendException("Exception occurred while retrieving public key from keystore", e);
         }
     }
@@ -99,7 +98,7 @@ public class JwtProvider {
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    //Common function to retrive any particular data from token
+    //Common function to retrieve any particular data from token
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);

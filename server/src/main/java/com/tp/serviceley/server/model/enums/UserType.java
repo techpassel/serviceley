@@ -14,5 +14,4 @@ public enum UserType {
     public String getType(){
         return this.type;
     }
-
 }

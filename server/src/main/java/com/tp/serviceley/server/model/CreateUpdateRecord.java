@@ -1,8 +1,8 @@
 package com.tp.serviceley.server.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -14,11 +14,9 @@ import java.time.LocalDateTime;
 // work the same way as in normal Java classes.So we explicitly need to tell JPA that these fields needs to be added.
 @Data
 public class CreateUpdateRecord {
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 }

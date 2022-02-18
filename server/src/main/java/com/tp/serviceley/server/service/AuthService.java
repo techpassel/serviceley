@@ -42,7 +42,6 @@ public class AuthService {
         if(emailUser.isPresent()){
             throw new BackendException("Email already exist");
         }
-
         User user = new User();
         user.setFirstName(signupRequestDto.getFirstName());
         user.setLastName(signupRequestDto.getLastName());
@@ -50,7 +49,12 @@ public class AuthService {
         user.setEmail(email);
         user.setUserType(signupRequestDto.getUserType());
         user.setGender(signupRequestDto.getGender());
-        userRepository.save(user);
+        System.out.println(user);
+        try {
+            userRepository.save(user);
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
         sendAccountActivationEmail(user);
     }
 
@@ -63,7 +67,7 @@ public class AuthService {
             } else {
                 sendAccountActivationEmail(user);
             }
-            return "An activation email is sent successfully on your registered email";
+            return "An activation email is sent successfully on your registered email.Please verify your email.";
         } else {
             throw new BackendException("User with given email not found");
         }
