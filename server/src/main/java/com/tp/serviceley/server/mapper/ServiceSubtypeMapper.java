@@ -4,7 +4,7 @@ import com.tp.serviceley.server.dto.ServiceSubtypeRequestDto;
 import com.tp.serviceley.server.dto.ServiceSubtypeResponseDto;
 import com.tp.serviceley.server.model.ServiceSubtype;
 import com.tp.serviceley.server.model.ServiceType;
-import com.tp.serviceley.server.model.others.OptionalServiceSubtype;
+import com.tp.serviceley.server.model.dto_related.DtoServiceSubtype;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -26,8 +26,8 @@ public abstract class ServiceSubtypeMapper {
     @Mapping(target = "optionalServices", expression = "java(getOptionalServices(serviceSubtype))")
     public abstract ServiceSubtypeResponseDto mapToDto(ServiceSubtype serviceSubtype);
 
-    List<OptionalServiceSubtype> getOptionalServices(ServiceSubtype serviceSubtype){
-        return serviceSubtype.getOptionalServices().stream().map(e -> new OptionalServiceSubtype(e.getId(), e.getSubtype())).
+    List<DtoServiceSubtype> getOptionalServices(ServiceSubtype serviceSubtype){
+        return serviceSubtype.getOptionalServices().stream().map(e -> new DtoServiceSubtype(e.getId(), e.getSubtype())).
         collect(Collectors.toList());
     }
 }

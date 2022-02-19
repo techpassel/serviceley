@@ -1,16 +1,15 @@
-package com.tp.serviceley.server.controller;
+package com.tp.serviceley.server.controller.admin;
 
 import com.tp.serviceley.server.dto.ServiceSubtypeRequestDto;
+import com.tp.serviceley.server.dto.ServiceUnitRequestDto;
 import com.tp.serviceley.server.exception.BackendException;
 import com.tp.serviceley.server.model.ServiceType;
-import com.tp.serviceley.server.service.ServiceService;
+import com.tp.serviceley.server.service.admin.ServiceService;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/service")
@@ -50,7 +49,6 @@ public class ServiceController {
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){
-            e.printStackTrace();
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -59,6 +57,30 @@ public class ServiceController {
     public ResponseEntity<?> deleteServiceSubtype(@PathVariable Long id){
         try{
             serviceService.deleteServiceSubtype(id);
+            return new ResponseEntity<>("Service subtype deleted successfully.", HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/unit")
+    public ResponseEntity<?> createServiceUnit(@RequestBody ServiceUnitRequestDto serviceUnitData){
+        try {
+            HttpStatus status = serviceUnitData.getId() == null ? HttpStatus.CREATED : HttpStatus.OK;
+            return new ResponseEntity<>(serviceService.createServiceUnit(serviceUnitData), status);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/unit/{id}")
+    public ResponseEntity<?> deleteServiceUnit(@PathVariable Long id){
+        try{
+            serviceService.deleteServiceUnit(id);
             return new ResponseEntity<>("Service subtype deleted successfully.", HttpStatus.OK);
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

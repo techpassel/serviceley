@@ -1,9 +1,9 @@
 package com.tp.serviceley.server.model.enums;
 
 public enum ServiceUnitType {
-    Basic("basic"),
-    AdditionalPerUnit("additionalPerUnit"),
-    PerUnitBasis("perUnitBasis");
+    Basic,
+    AdditionalPerUnit,
+    PerUnitBasis;
     /*
         A service can be either a combination of types - Basic + AdditionalPerUnit or of type PerUnitBasis
         For example - For service subtype "Home cleaning" there will be two service unit type -
@@ -12,13 +12,4 @@ public enum ServiceUnitType {
         And for service subtype "Elderly/Patient Care" there will be only one unit type -
         1. PerUnitBasis - For every Elderly person or Patient for which service is required
     */
-    private String type;
-
-    ServiceUnitType(String type) {
-        this.type = type;
-    }
-
-    public String getType(){
-        return this.type;
-    }
 }

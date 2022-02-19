@@ -18,13 +18,4 @@ public class ServiceSubtypeRequestDto {
     private List<String> relatedInformation;
     private List<String> serviceDetails;
     private List<Long> optionalServices;
-
-    ServiceSubtypeRequestDto(Long typeId, String subtype, ServiceOfferingType serviceOfferingType, List<String> relatedInformation, List<String> serviceDetails, List<Long> optionalServices){
-        this.typeId = typeId;
-        this.subtype = subtype;
-        this.serviceOfferingType = serviceOfferingType;
-        this.relatedInformation = relatedInformation;
-        this.serviceDetails = serviceDetails;
-        this.optionalServices = optionalServices;
-    }
 }

@@ -19,7 +19,7 @@ public class ServiceSubtype {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "service_type_id", nullable = false, referencedColumnName = "id")
     private ServiceType type;
 
