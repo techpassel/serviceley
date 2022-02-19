@@ -1,15 +1,15 @@
 package com.tp.serviceley.server.service.admin;
 
-import com.tp.serviceley.server.dto.ServiceSubtypeRequestDto;
-import com.tp.serviceley.server.dto.ServiceSubtypeResponseDto;
-import com.tp.serviceley.server.dto.ServiceUnitRequestDto;
-import com.tp.serviceley.server.dto.ServiceUnitResponseDto;
+import com.tp.serviceley.server.dto.*;
 import com.tp.serviceley.server.exception.BackendException;
+import com.tp.serviceley.server.mapper.ServiceFrequencyMapper;
 import com.tp.serviceley.server.mapper.ServiceSubtypeMapper;
 import com.tp.serviceley.server.mapper.ServiceUnitMapper;
+import com.tp.serviceley.server.model.ServiceFrequency;
 import com.tp.serviceley.server.model.ServiceSubtype;
 import com.tp.serviceley.server.model.ServiceType;
 import com.tp.serviceley.server.model.ServiceUnit;
+import com.tp.serviceley.server.repository.ServiceFrequencyRepository;
 import com.tp.serviceley.server.repository.ServiceSubtypeRepository;
 import com.tp.serviceley.server.repository.ServiceTypeRepository;
 import com.tp.serviceley.server.repository.ServiceUnitRepository;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -32,24 +31,26 @@ public class ServiceService {
     private final ServiceSubtypeMapper serviceSubtypeMapper;
     private final ServiceUnitRepository serviceUnitRepository;
     private final ServiceUnitMapper serviceUnitMapper;
+    private final ServiceFrequencyRepository serviceFrequencyRepository;
+    private final ServiceFrequencyMapper serviceFrequencyMapper;
 
-    public ServiceType createServiceType(ServiceType service){
+    public ServiceType createServiceType(ServiceType service) {
         return serviceTypeRepository.save(service);
     }
 
-    public void deleteServiceType(Long id){
+    public void deleteServiceType(Long id) {
         try {
             serviceTypeRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new BackendException("Service type with given id doesn't exist.", e);
         }
     }
 
-    public ServiceSubtypeResponseDto createServiceSubtype(ServiceSubtypeRequestDto serviceSubtypeRequestDto){
+    public ServiceSubtypeResponseDto createServiceSubtype(ServiceSubtypeRequestDto serviceSubtypeRequestDto) {
         Optional<ServiceSubtype> optionalServiceSubtype = serviceSubtypeRepository.
                 findByTypeAndSubtype(serviceSubtypeRequestDto.getTypeId(), serviceSubtypeRequestDto.getSubtype());
         if (optionalServiceSubtype.isPresent()) {
-            if(serviceSubtypeRequestDto.getId() == null) throw new BackendException("Service Subtype already exist.");
+            if (serviceSubtypeRequestDto.getId() == null) throw new BackendException("Service Subtype already exist.");
             else {
                 ServiceSubtype subtype = optionalServiceSubtype.get();
                 if (subtype.getId() != serviceSubtypeRequestDto.getId())
@@ -67,20 +68,20 @@ public class ServiceService {
         return serviceSubtypeMapper.mapToDto(serviceSubtype);
     }
 
-    public void deleteServiceSubtype(Long id){
-        try{
+    public void deleteServiceSubtype(Long id) {
+        try {
             serviceSubtypeRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
             throw new BackendException("Service type with given id doesn't exist.", e);
         }
     }
 
-    public ServiceUnitResponseDto createServiceUnit(ServiceUnitRequestDto serviceUnitRequestDto){
+    public ServiceUnitResponseDto createServiceUnit(ServiceUnitRequestDto serviceUnitRequestDto) {
         List<ServiceUnit> optionalServiceUnit = serviceUnitRepository.
                 findBySubtypeUnitAndLimit(serviceUnitRequestDto.getServiceSubtypeId(),
                         serviceUnitRequestDto.getServiceUnitType().ordinal(), serviceUnitRequestDto.getUnitLimit());
         if (optionalServiceUnit.size() > 0) {
-            if(serviceUnitRequestDto.getId() == null) throw new BackendException("Service unit already exist.");
+            if (serviceUnitRequestDto.getId() == null) throw new BackendException("Service unit already exist.");
             else {
                 Long matchingServiceUnits = optionalServiceUnit.stream().filter(v -> v.getId() ==
                         serviceUnitRequestDto.getId()).count();
@@ -94,10 +95,38 @@ public class ServiceService {
         return serviceUnitMapper.mapToDto(serviceUnit);
     }
 
-    public void deleteServiceUnit(Long id){
-        try{
+    public void deleteServiceUnit(Long id) {
+        try {
             serviceUnitRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e){
+        } catch (EmptyResultDataAccessException e) {
+            throw new BackendException("Service unit with given id doesn't exist.", e);
+        }
+    }
+
+    public ServiceFrequencyResponseDto createServiceFrequency(ServiceFrequencyRequestDto serviceFrequencyRequestDto) {
+        List<ServiceFrequency> serviceFrequencies = serviceFrequencyRepository
+                .findByServiceSubtypeAndFrequency(serviceFrequencyRequestDto.getServiceSubtypeId(),
+                        serviceFrequencyRequestDto.getFrequency());
+        if(serviceFrequencies.size() > 0){
+            if(serviceFrequencyRequestDto.getId() == null) throw new BackendException("Service frequency already exist.");
+            else {
+                Long matchingServiceFrequencies = serviceFrequencies.stream().filter(v -> v.getId() == serviceFrequencyRequestDto.getId()).count();
+                if(matchingServiceFrequencies == 0) throw new BackendException("Some other service frequency " +
+                        "with same service subtype and frequency already exist.");
+            }
+        }
+        ServiceSubtype serviceSubtype = serviceSubtypeRepository.findById(serviceFrequencyRequestDto.
+                getServiceSubtypeId()).orElseThrow(() ->
+                new BackendException("Service subtype with given id doesn't exist."));
+        ServiceFrequency serviceFrequency = serviceFrequencyRepository.save(serviceFrequencyMapper.
+                mapToModel(serviceFrequencyRequestDto, serviceSubtype));
+        return serviceFrequencyMapper.mapToDto(serviceFrequency);
+    }
+
+    public void deleteServiceFrequency(Long id) {
+        try {
+            serviceFrequencyRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
             throw new BackendException("Service unit with given id doesn't exist.", e);
         }
     }

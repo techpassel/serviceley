@@ -1,5 +1,6 @@
 package com.tp.serviceley.server.controller.admin;
 
+import com.tp.serviceley.server.dto.ServiceFrequencyRequestDto;
 import com.tp.serviceley.server.dto.ServiceSubtypeRequestDto;
 import com.tp.serviceley.server.dto.ServiceUnitRequestDto;
 import com.tp.serviceley.server.exception.BackendException;
@@ -81,7 +82,31 @@ public class ServiceController {
     public ResponseEntity<?> deleteServiceUnit(@PathVariable Long id){
         try{
             serviceService.deleteServiceUnit(id);
-            return new ResponseEntity<>("Service subtype deleted successfully.", HttpStatus.OK);
+            return new ResponseEntity<>("Service unit deleted successfully.", HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/frequency")
+    public ResponseEntity<?> createServiceFrequency(@RequestBody ServiceFrequencyRequestDto serviceFrequencyRequestDto){
+        try {
+            HttpStatus status = serviceFrequencyRequestDto.getId() == null ? HttpStatus.CREATED : HttpStatus.OK;
+            return new ResponseEntity<>(serviceService.createServiceFrequency(serviceFrequencyRequestDto), status);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/frequency/{id}")
+    public ResponseEntity<?> deleteServiceFrequency(@PathVariable Long id){
+        try{
+            serviceService.deleteServiceFrequency(id);
+            return new ResponseEntity<>("Service frequency deleted successfully.", HttpStatus.OK);
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){
