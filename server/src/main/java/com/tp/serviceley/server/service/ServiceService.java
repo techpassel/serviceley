@@ -25,18 +25,8 @@ public class ServiceService {
     private final ServiceSubtypeRepository serviceSubtypeRepository;
     private final ServiceSubtypeMapper serviceSubtypeMapper;
 
-    public ServiceType createServiceType(String serviceName){
-        Optional<ServiceType> serviceType = serviceTypeRepository.findByType(serviceName);
-        if(serviceType.isPresent()){
-            throw new BackendException("Service already exist.");
-        }
-        return serviceTypeRepository.save(new ServiceType(serviceName));
-    }
-
-    public ServiceType updateServiceType(Long id, String typeNewValue){
-        ServiceType serviceType = serviceTypeRepository.findById(id).orElseThrow(() -> new BackendException("Service type with given id doesn't exist."));
-        serviceType.setType(typeNewValue);
-        return serviceTypeRepository.save(serviceType);
+    public ServiceType createServiceType(ServiceType service){
+        return serviceTypeRepository.save(service);
     }
 
     public void deleteServiceType(Long id){
@@ -48,10 +38,12 @@ public class ServiceService {
     }
 
     public ServiceSubtypeResponseDto createServiceSubtype(ServiceSubtypeRequestDto serviceSubtypeRequestDto){
-        Optional<ServiceSubtype> optionalServiceSubtype = serviceSubtypeRepository.
-                findByTypeAndSubtype(serviceSubtypeRequestDto.getTypeId(), serviceSubtypeRequestDto.getSubtype());
-        if(optionalServiceSubtype.isPresent()){
-            throw new BackendException("Subtype already exist.");
+        if(serviceSubtypeRequestDto.getId() == null) {
+            Optional<ServiceSubtype> optionalServiceSubtype = serviceSubtypeRepository.
+                    findByTypeAndSubtype(serviceSubtypeRequestDto.getTypeId(), serviceSubtypeRequestDto.getSubtype());
+            if (optionalServiceSubtype.isPresent()) {
+                throw new BackendException("Subtype already exist.");
+            }
         }
         ServiceType serviceType = serviceTypeRepository.findById(serviceSubtypeRequestDto.getTypeId())
                 .orElseThrow(() -> new BackendException("Service type with given id doesn't exist."));
@@ -63,5 +55,13 @@ public class ServiceService {
         ServiceSubtype sst = serviceSubtypeMapper.mapToModel(serviceSubtypeRequestDto, serviceType, optionalServices);
         ServiceSubtype serviceSubtype = serviceSubtypeRepository.save(sst);
         return serviceSubtypeMapper.mapToDto(serviceSubtype);
+    }
+
+    public void deleteServiceSubtype(Long id){
+        try{
+        serviceSubtypeRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e){
+            throw new BackendException("Service type with given id doesn't exist.", e);
+        }
     }
 }
