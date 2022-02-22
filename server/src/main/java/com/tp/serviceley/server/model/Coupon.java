@@ -51,7 +51,7 @@ public class Coupon extends CreateUpdateRecord{
     // An entry should be created in UserCoupon table also.
 
     @ManyToOne
-    @JoinColumn(name = "created_by_userid", nullable = false)
+    @JoinColumn(name = "created_by_userid", nullable = false, updatable = false)
     private User createdBy;
 
     @ManyToOne

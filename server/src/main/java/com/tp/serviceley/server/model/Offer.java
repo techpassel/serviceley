@@ -14,17 +14,28 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "offer")
 public class Offer extends CreateUpdateRecord{
-    // Offer will be used to calculate estimated amount while Coupon and SpecialDiscount will not be
-    // considered in calculation of estimated amount
+    /*
+     1.) Offer will be created for per-service basis. For offer on order amount use Coupon instead.
+     2.) Offer will be used to calculate estimated amount while Coupon and SpecialDiscount will not be
+     considered in calculation of estimated amount
+    */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "service_type_id", nullable = false)
+    private ServiceType serviceType;
+
+    @ManyToOne
+    @JoinColumn(name = "service_subtype_id")
+    private ServiceSubtype serviceSubtype;
+
     @Column(name = "minimum_order_value")
-    private Integer MinimumOrderValue = -1;
+    private Integer minimumOrderValue = -1;
 
     @Column(name = "minimum_order_month")
-    private Integer MinimumOrderMonth = -1;
+    private Integer minimumOrderMonth = -1;
 
     private Double amount;
 
@@ -37,10 +48,10 @@ public class Offer extends CreateUpdateRecord{
     private LocalDateTime expiryDate;
 
     @ManyToOne
-    @JoinColumn(name = "created_by_userid", nullable = false)
+    @JoinColumn(name = "created_by", nullable = false, updatable = false)
     private User createdBy;
 
     @ManyToOne
-    @JoinColumn(name = "updated_by_userid")
+    @JoinColumn(name = "updated_by")
     private User updatedBy;
 }
