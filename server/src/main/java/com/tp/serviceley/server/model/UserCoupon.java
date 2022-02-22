@@ -1,5 +1,7 @@
 package com.tp.serviceley.server.model;
 
+import com.tp.serviceley.server.model.enums.SpecialDiscountStatus;
+import com.tp.serviceley.server.model.enums.UserCouponType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,12 @@ public class UserCoupon extends CreateUpdateRecord{
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "coupon_id", nullable = false)
+    @JoinColumn(name = "coupon_id")
     private Coupon coupon;
+
+    @Column(name = "total_allowed_uses")
+    private Integer totalAllowedUses;
+
+    @Column(name = "total_remaining_uses")
+    private Integer totalRemainingUses;
 }

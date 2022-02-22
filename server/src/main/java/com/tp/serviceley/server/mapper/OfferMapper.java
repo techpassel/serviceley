@@ -17,14 +17,14 @@ import org.mapstruct.ReportingPolicy;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         componentModel = "spring")
 public abstract class OfferMapper {
-    @Mapping(target = "createdBy", source = "userId")
-    @Mapping(target = "updatedBy", source = "userId")
+    @Mapping(target = "createdBy", source = "createdByUser")
+    @Mapping(target = "updatedBy", source = "updatedByUser")
     @Mapping(target = "serviceType", source = "serviceType")
     @Mapping(target = "serviceSubtype", source = "serviceSubtype")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "id", source = "offerRequestDto.id")
-    public abstract Offer mapToModel(OfferRequestDto offerRequestDto, User userId,
+    public abstract Offer mapToModel(OfferRequestDto offerRequestDto, User createdByUser, User updatedByUser,
                                      ServiceType serviceType, ServiceSubtype serviceSubtype);
 
     @Mapping(target = "createdBy", expression = "java(getDtoCreatedByUser(offer))")

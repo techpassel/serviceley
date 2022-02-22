@@ -16,13 +16,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "special_discount")
 public class SpecialDiscount extends CreateUpdateRecord{
+    //Whom this special discount is offered we will store that information in UserCoupon table.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @Size(min = 16, max = 16)
     @Column(length = 16)
@@ -36,38 +33,23 @@ public class SpecialDiscount extends CreateUpdateRecord{
     // So, for 5% discount we will store amount as 5 and amountIn as Percentage
 
     @Column(name = "minimum_order_value")
-    private Integer MinimumOrderValue = -1;
-    // Here -1 is default value which means no MinimumOrderValue is required.
+    private Integer MinimumOrderValue;
 
     @Column(name = "minimum_order_month")
-    private Integer MinimumOrderMonth = -1;
-    // Here -1 is default value which means no MinimumOrderMonth is required.
+    private Integer MinimumOrderMonth;
 
     @Column(name = "expiry_date")
     private LocalDateTime expiryDate;
 
     @Column(name = "applicable_for_months")
-    private int applicableForMonths = -1;
-    // Here -1 is default value which means discount will be applicable as long as order is active.
+    private Integer applicableForMonths;
 
     @ManyToOne
-    @JoinColumn(name = "issued_by")
-    private User issuedBy;
+    @JoinColumn(name = "created_by")
+    private User createdBy;
 
     // We can use '@Lob' also in place of '@Column(columnDefinition = "TEXT")' but that will create LongText type
     // filed, but we want only "Text" type field as that will be enough for our requirement.
-    @Column(columnDefinition = "TEXT", name = "reason_of_issue")
-    private String reasonOfIssue;
-
-    private SpecialDiscountStatus status;
-
-    @ManyToOne
-    @JoinColumn(name = "approved_by")
-    private User approvedBy;
-    // Here we have given the name of field as "approvedBy" but in case of rejection also
-    // we will store the userId of the user who reject this in this field.
-
-    @Column(columnDefinition = "TEXT", name = "approval_remark")
-    private String approvalRemark;
-    // Not only approval remark but rejection remark should also be stored in this field.
+    @Column(columnDefinition = "TEXT", name = "remark")
+    private String remark;
 }
