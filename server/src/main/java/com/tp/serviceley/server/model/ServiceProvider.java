@@ -29,9 +29,10 @@ public class ServiceProvider extends CreateUpdateRecord{
     @ElementCollection(targetClass = String.class)
     private List<String> languages;
 
-    private String highest_qualification;
+    private String qualification;
 
-    private String highest_qualification_certificate;
+    //Following all data are String type, but it will contain file location of documents(i.e. URL)
+    private String qualification_certificate;
 
     private String image1;
 
