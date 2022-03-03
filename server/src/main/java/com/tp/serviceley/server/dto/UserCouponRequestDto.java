@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCouponMultipleUserRequestDto {
+public class UserCouponRequestDto{
     private Long id;
     private List<Long> userIds;
     private Long couponId;

@@ -4,12 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCouponSingleUserRequestDto {
+public class UserSpecialDiscountRequestDto{
     private Long id;
-    private Long userId;
-    private Long couponId;
+    private List<Long> userIds;
+    private Long specialDiscountId;
     private Integer totalAllowedUses;
+    private Integer totalRemainingUses;
+    private String reasonOfIssue;
 }

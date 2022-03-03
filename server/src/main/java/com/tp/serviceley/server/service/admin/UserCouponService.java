@@ -1,6 +1,6 @@
 package com.tp.serviceley.server.service.admin;
 
-import com.tp.serviceley.server.dto.UserCouponMultipleUserRequestDto;
+import com.tp.serviceley.server.dto.UserCouponRequestDto;
 import com.tp.serviceley.server.dto.UserCouponResponseDto;
 import com.tp.serviceley.server.exception.BackendException;
 import com.tp.serviceley.server.mapper.UserCouponMapper;
@@ -29,11 +29,11 @@ public class UserCouponService {
     private final UserCouponRepository userCouponRepository;
     private final UserCouponMapper userCouponMapper;
 
-    public List<UserCouponResponseDto> assignUserCoupon(UserCouponMultipleUserRequestDto userCouponsData){
+    public List<UserCouponResponseDto> assignUserCoupon(UserCouponRequestDto userCouponsData){
         List<UserCoupon> userCoupons = new ArrayList<>();
+        Coupon coupon = couponRepository.getById(userCouponsData.getCouponId());
         userCouponsData.getUserIds().forEach(v -> {
             User user = userRepository.getById(v);
-            Coupon coupon = couponRepository.getById(userCouponsData.getCouponId());
             UserCoupon userCoupon = new UserCoupon(user, coupon, userCouponsData.getTotalAllowedUses());
             userCoupons.add(userCoupon);
         });
@@ -48,7 +48,7 @@ public class UserCouponService {
         try {
             userCouponRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new BackendException("Service unit with given id doesn't exist.", e);
+            throw new BackendException("User coupon with given id doesn't exist.", e);
         }
     }
 

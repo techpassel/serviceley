@@ -1,9 +1,17 @@
 package com.tp.serviceley.server.model;
 
 import com.tp.serviceley.server.model.enums.SpecialDiscountStatus;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "user_special_discount")
 public class UserSpecialDiscount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
