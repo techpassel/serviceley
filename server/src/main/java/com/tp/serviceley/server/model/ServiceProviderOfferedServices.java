@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 @Table(name = "service_providers_service")
-public class ServiceProvidersService {
+public class ServiceProviderOfferedServices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

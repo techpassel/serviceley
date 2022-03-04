@@ -19,4 +19,13 @@ public class CommonService {
         User user = userRepository.findByEmail(userName).orElseThrow(() -> new BackendException("Invalid User Details."));
         return user;
     }
+
+    public String getFileExtension(String fileName){
+        int i = fileName.lastIndexOf('.');
+        if (i > 0) {
+            return "."+fileName.substring(i+1);
+        } else {
+            throw new BackendException("File doesn't have any extension.");
+        }
+    }
 }

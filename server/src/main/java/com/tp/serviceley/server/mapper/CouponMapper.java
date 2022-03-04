@@ -17,18 +17,20 @@ public abstract class CouponMapper {
     @Mapping(target = "id", source = "couponRequestDto.id")
     @Mapping(target = "createdBy", source = "createdByUser")
     @Mapping(target = "updatedBy", source = "updatedByUser")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     public abstract Coupon mapToModel(CouponRequestDto couponRequestDto, User createdByUser, User updatedByUser);
 
     @Mapping(target = "createdBy", expression = "java(getDtoCreatedByUser(coupon))")
     @Mapping(target = "updatedBy", expression = "java(getDtoUpdatedByUser(coupon))")
     public abstract CouponResponseDto mapToDto(Coupon coupon);
 
-    private DtoUser getDtoCreatedByUser(Coupon coupon){
+    public DtoUser getDtoCreatedByUser(Coupon coupon){
         User user = coupon.getCreatedBy();
         return new DtoUser(user.getId(), user.getFirstName(), user.getLastName());
     }
 
-    private DtoUser getDtoUpdatedByUser(Coupon coupon){
+    public DtoUser getDtoUpdatedByUser(Coupon coupon){
         User user = coupon.getUpdatedBy();
         return user != null ? new DtoUser(user.getId(), user.getFirstName(), user.getLastName()) : null;
     }

@@ -1,5 +1,6 @@
 package com.tp.serviceley.server.dto;
 
+import com.tp.serviceley.server.model.enums.Religion;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,10 @@ public class ServiceProviderRequestDto {
     private Long id;
     private Long userId;
     private Integer age;
-    private String religion;
+    private Religion religion;
     private List<String> languages;
     private String qualification;
-    private MultipartFile qualification_certificate;
+    private MultipartFile qualificationCertificate;
 
     private MultipartFile image1;
 
@@ -25,7 +26,7 @@ public class ServiceProviderRequestDto {
 
     private MultipartFile image3;
 
-    private MultipartFile id_proof;
+    private MultipartFile idProof;
 
-    private MultipartFile address_proof;
+    private MultipartFile addressProof;
 }

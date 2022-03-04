@@ -18,7 +18,7 @@ public abstract class UserCouponMapper {
     @Mapping(target = "couponId", source = "userCoupon.coupon.id")
     public abstract UserCouponResponseDto mapToDto(UserCoupon userCoupon);
 
-    private DtoUser getUser(UserCoupon userCoupon){
+    public DtoUser getUser(UserCoupon userCoupon){
         User user = userCoupon.getUser();
         return new DtoUser(user.getId(), user.getFirstName(), user.getLastName());
     }

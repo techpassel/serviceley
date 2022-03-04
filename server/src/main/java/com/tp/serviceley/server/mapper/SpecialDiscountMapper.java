@@ -15,7 +15,9 @@ import org.mapstruct.ReportingPolicy;
         componentModel = "spring")
 public abstract class SpecialDiscountMapper {
     @Mapping(target = "id", source = "specialDiscountRequestDto.id")
-    @Mapping(target = "CreatedBy", source = "user")
+    @Mapping(target = "createdBy", source = "user")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     public abstract SpecialDiscount mapToModel(SpecialDiscountRequestDto specialDiscountRequestDto, User user,
                                                String code);
 

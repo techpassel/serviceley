@@ -22,12 +22,12 @@ public abstract class UserSpecialDiscountMapper {
     public abstract UserSpecialDiscount mapToModel(UserSpecialDiscountRequestDto userSpecialDiscountRequestDto,
                                                    User user, SpecialDiscount specialDiscount, User issuedBy);
 
-    @Mapping(target = "user", expression = "java(getDtoUSer(userSpecialDiscount.user))")
-    @Mapping(target = "issuedBy", expression = "java(getDtoUSer(userSpecialDiscount.issuedBy))")
-    @Mapping(target = "approvedBy", expression = "java(getDtoUser(userSpecialDiscount.approvedBy))")
+    @Mapping(target = "user", expression = "java(getDtoUser(userSpecialDiscount.getUser()))")
+    @Mapping(target = "issuedBy", expression = "java(getDtoUser(userSpecialDiscount.getIssuedBy()))")
+    @Mapping(target = "approvedBy", expression = "java(getDtoUser(userSpecialDiscount.getApprovedBy()))")
     public abstract UserSpecialDiscountResponseDto mapToDto(UserSpecialDiscount userSpecialDiscount);
 
-    private DtoUser getDtoUser(User user){
+    public DtoUser getDtoUser(User user){
         if(user != null){
             return new DtoUser(user.getId(), user.getFirstName(), user.getLastName());
         } else {
