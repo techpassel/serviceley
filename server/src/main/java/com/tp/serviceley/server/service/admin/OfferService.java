@@ -36,7 +36,7 @@ public class OfferService {
         User createdByUser;
         if(offerRequestDto.getId() != null) {
             Long id = offerRequestDto.getId();
-            Offer offer = offerRepository.getById(id);
+            Offer offer = offerRepository.findById(id).orElseThrow(() -> new BackendException("Offer not found"));
             createdByUser = offer.getCreatedBy();
             updatedByUser = currentUser;
         } else createdByUser = currentUser;
@@ -64,7 +64,7 @@ public class OfferService {
         User createdByUser;
         if(couponRequestDto.getId() != null) {
             Long id = couponRequestDto.getId();
-            Offer offer = offerRepository.getById(id);
+            Offer offer = offerRepository.findById(id).orElseThrow(() -> new BackendException("Offer not found"));
             createdByUser = offer.getCreatedBy();
             updatedByUser = currentUser;
         } else createdByUser = currentUser;
@@ -84,7 +84,8 @@ public class OfferService {
         User createdByUser;
         String code;
         if(specialDiscountRequestDto.getId() != null){
-            SpecialDiscount specialDiscount = specialDiscountRepository.getById(specialDiscountRequestDto.getId());
+            SpecialDiscount specialDiscount = specialDiscountRepository.findById(specialDiscountRequestDto.getId())
+                    .orElseThrow(() -> new BackendException("Special discount not found."));
             createdByUser = specialDiscount.getCreatedBy();
             code = specialDiscount.getCode();
         } else {

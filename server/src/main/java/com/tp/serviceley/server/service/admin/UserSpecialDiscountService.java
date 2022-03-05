@@ -31,12 +31,13 @@ public class UserSpecialDiscountService {
     private final CommonService commonService;
     private final UserSpecialDiscountRepository userSpecialDiscountRepository;
 
-    public List<UserSpecialDiscountResponseDto> assignUserSpecialDiscount(UserSpecialDiscountRequestDto specialDiscountData){
+    public List<UserSpecialDiscountResponseDto> assignUserSpecialDiscount(UserSpecialDiscountRequestDto specialDiscountData) {
         List<UserSpecialDiscount> userSpecialDiscounts = new ArrayList<>();
-        SpecialDiscount specialDiscount = specialDiscountRepository.getById(specialDiscountData.getSpecialDiscountId());
+        SpecialDiscount specialDiscount = specialDiscountRepository.findById(specialDiscountData.
+                getSpecialDiscountId()).orElseThrow(() -> new BackendException("Special discount not found"));
         User currentUser = commonService.getCurrentUser();
         specialDiscountData.getUserIds().forEach(v -> {
-            User user = userRepository.getById(v);
+            User user = userRepository.findById(v).orElseThrow(() -> new BackendException("User not found for userId" + v));
             UserSpecialDiscount usd = userSpecialDiscountMapper.mapToModel(specialDiscountData, user, specialDiscount, currentUser);
             userSpecialDiscounts.add(usd);
         });
@@ -45,11 +46,11 @@ public class UserSpecialDiscountService {
         return assignedUserSpecialDiscounts.stream().map(e -> userSpecialDiscountMapper.mapToDto(e)).collect(Collectors.toList());
     }
 
-    public UserSpecialDiscountResponseDto approveRejectSpecialDiscount(Map<String, Object> data){
+    public UserSpecialDiscountResponseDto approveRejectSpecialDiscount(Map<String, Object> data) {
         Long id = (Long) data.get("id");
         SpecialDiscountStatus status = (SpecialDiscountStatus) data.get("status");
         String remark = (String) data.get("remark");
-        UserSpecialDiscount userSpecialDiscount = userSpecialDiscountRepository.getById(id);
+        UserSpecialDiscount userSpecialDiscount = userSpecialDiscountRepository.findById(id).orElseThrow(() -> new BackendException("User Special discount not found"));
         User currentUser = commonService.getCurrentUser();
         userSpecialDiscount.setStatus(status);
         userSpecialDiscount.setApprovedBy(currentUser);
@@ -58,7 +59,7 @@ public class UserSpecialDiscountService {
         return userSpecialDiscountMapper.mapToDto(usd);
     }
 
-    public void deleteUserSpecialDiscount(Long id){
+    public void deleteUserSpecialDiscount(Long id) {
         try {
             userSpecialDiscountRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
@@ -66,8 +67,8 @@ public class UserSpecialDiscountService {
         }
     }
 
-    public List<DtoUser> getSpecialDiscountUsers(Long specialDiscountId){
-        SpecialDiscount specialDiscount = specialDiscountRepository.getById(specialDiscountId);
+    public List<DtoUser> getSpecialDiscountUsers(Long specialDiscountId) {
+        SpecialDiscount specialDiscount = specialDiscountRepository.findById(specialDiscountId).orElseThrow(() -> new BackendException("Special discount not found"));
         List<UserSpecialDiscount> userSpecialDiscounts = userSpecialDiscountRepository.findBySpecialDiscount(specialDiscount);
         List<DtoUser> users = userSpecialDiscounts.stream().map(v -> new DtoUser(v.getUser().getId(), v.getUser().getFirstName(), v.getUser().getLastName())).collect(Collectors.toList());
         return users;

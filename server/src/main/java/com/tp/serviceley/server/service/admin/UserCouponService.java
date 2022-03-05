@@ -31,9 +31,9 @@ public class UserCouponService {
 
     public List<UserCouponResponseDto> assignUserCoupon(UserCouponRequestDto userCouponsData){
         List<UserCoupon> userCoupons = new ArrayList<>();
-        Coupon coupon = couponRepository.getById(userCouponsData.getCouponId());
+        Coupon coupon = couponRepository.findById(userCouponsData.getCouponId()).orElseThrow(() -> new BackendException("Coupon not found"));
         userCouponsData.getUserIds().forEach(v -> {
-            User user = userRepository.getById(v);
+            User user = userRepository.findById(v).orElseThrow(() -> new BackendException(""));
             UserCoupon userCoupon = new UserCoupon(user, coupon, userCouponsData.getTotalAllowedUses());
             userCoupons.add(userCoupon);
         });
@@ -53,7 +53,7 @@ public class UserCouponService {
     }
 
     public List<DtoUser> getCouponUsers(Long couponId){
-        Coupon coupon = couponRepository.getById(couponId);
+        Coupon coupon = couponRepository.findById(couponId).orElseThrow(() -> new BackendException("Coupon not found."));
         List<UserCoupon> userCoupons = userCouponRepository.findByCoupon(coupon);
         List<DtoUser> users = userCoupons.stream().map(v -> new DtoUser(v.getUser().getId(), v.getUser().getFirstName(), v.getUser().getLastName())).collect(Collectors.toList());
         return users;
