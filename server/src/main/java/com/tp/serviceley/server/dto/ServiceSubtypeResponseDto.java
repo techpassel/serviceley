@@ -19,5 +19,4 @@ public class ServiceSubtypeResponseDto {
     private ServiceOfferingType serviceOfferingType;
     private List<String> relatedInformation;
     private List<String> serviceDetails;
-    private List<DtoServiceSubtype> optionalServices;
 }

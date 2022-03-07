@@ -1,6 +1,6 @@
 package com.tp.serviceley.server.model.enums;
 
-public enum CookingSpecialities {
+public enum CookingSpeciality {
     NorthIndian("northIndian"),
     SouthIndian("southIndian"),
     Bengali("bengali"),
@@ -12,7 +12,7 @@ public enum CookingSpecialities {
 
     private String type;
 
-    CookingSpecialities(String type){
+    CookingSpeciality(String type){
         this.type = type;
     }
 

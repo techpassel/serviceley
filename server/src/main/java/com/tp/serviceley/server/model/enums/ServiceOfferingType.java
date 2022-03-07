@@ -2,8 +2,7 @@ package com.tp.serviceley.server.model.enums;
 
 public enum ServiceOfferingType {
     Main("main"),
-    Additional("additional"),
-    MainAndAdditional("mainAndAdditional");
+    Additional("additional");
 
     private String type;
 

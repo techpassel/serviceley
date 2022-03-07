@@ -59,13 +59,7 @@ public class ServiceService {
         }
         ServiceType serviceType = serviceTypeRepository.findById(serviceSubtypeRequestDto.getTypeId())
                 .orElseThrow(() -> new BackendException("Service type with given id doesn't exist."));
-        List<ServiceSubtype> optionalServices = new ArrayList<>();
-        serviceSubtypeRequestDto.getOptionalServices().forEach(id -> {
-            optionalServices.add(serviceSubtypeRepository.findById((Long) id).orElseThrow(() ->
-                    new BackendException("Service subtype with given id(id = "+ id
-                            +") in optional services doesn't exist.")));
-        });
-        ServiceSubtype serviceSubtype = serviceSubtypeRepository.save(serviceSubtypeMapper.mapToModel(serviceSubtypeRequestDto, serviceType, optionalServices));
+        ServiceSubtype serviceSubtype = serviceSubtypeRepository.save(serviceSubtypeMapper.mapToModel(serviceSubtypeRequestDto, serviceType));
         return serviceSubtypeMapper.mapToDto(serviceSubtype);
     }
 

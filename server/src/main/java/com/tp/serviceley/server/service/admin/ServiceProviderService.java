@@ -1,14 +1,11 @@
 package com.tp.serviceley.server.service.admin;
 
-import com.tp.serviceley.server.dto.ServiceProviderFileDto;
-import com.tp.serviceley.server.dto.ServiceProviderRequestDto;
-import com.tp.serviceley.server.dto.ServiceProviderResponseDto;
+import com.tp.serviceley.server.dto.*;
 import com.tp.serviceley.server.exception.BackendException;
+import com.tp.serviceley.server.mapper.ProviderEnrolledServiceMapper;
 import com.tp.serviceley.server.mapper.ServiceProviderMapper;
-import com.tp.serviceley.server.model.ServiceProvider;
-import com.tp.serviceley.server.model.User;
-import com.tp.serviceley.server.repository.ServiceProviderRepository;
-import com.tp.serviceley.server.repository.UserRepository;
+import com.tp.serviceley.server.model.*;
+import com.tp.serviceley.server.repository.*;
 import com.tp.serviceley.server.service.FileUploadService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +13,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Field;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +24,11 @@ public class ServiceProviderService {
     ServiceProviderMapper serviceProviderMapper;
     FileUploadService fileUploadService;
     UserRepository userRepository;
+    ServiceTypeRepository serviceTypeRepository;
+    ServiceSubtypeRepository serviceSubtypeRepository;
+    ServiceFrequencyRepository serviceFrequencyRepository;
+    ProviderEnrolledServiceRepository providerEnrolledServiceRepository;
+    ProviderEnrolledServiceMapper providerEnrolledServiceMapper;
 
     //private Logger logger = LoggerFactory.getLogger(ServiceProviderService.class);
     //Since we have used @Slf4j annotation, so we don't need to create Logger manually. Spring will do it for us.
@@ -118,7 +121,8 @@ public class ServiceProviderService {
 
     public void deleteServiceProvider(Long id) {
         try {
-            ServiceProvider serviceProvider = serviceProviderRepository.findById(id).orElseThrow(() -> new BackendException("Service provider not found."));
+            ServiceProvider serviceProvider = serviceProviderRepository.findById(id).orElseThrow(() -> new
+                    BackendException("Service provider not found."));
             Long userID = serviceProvider.getUser().getId();
             String keyName = "service-provider/" + userID;
             serviceProviderRepository.deleteById(id);
@@ -135,5 +139,29 @@ public class ServiceProviderService {
         }
     }
 
+    public ProvidersEnrolledServiceResponseDto createProvidersEnrolledService(
+            ProvidersEnrolledServiceRequestDto providersEnrolledServiceRequestDto){
+        ServiceProvider serviceProvider = serviceProviderRepository.findById(providersEnrolledServiceRequestDto.
+                getServiceProviderId()).orElseThrow(() -> new BackendException("Service provider not found."));
+        ServiceType serviceType = serviceTypeRepository.findById(providersEnrolledServiceRequestDto.getServiceTypeId())
+                .orElseThrow(() -> new BackendException("Service type not found."));
+        ServiceSubtype serviceSubtype = serviceSubtypeRepository.findById(providersEnrolledServiceRequestDto
+                .getServiceSubtypeId()).orElseThrow(() -> new BackendException("Service subtype not found."));
+        List<ServiceFrequency> serviceFrequencies = providersEnrolledServiceRequestDto.getSuitableFrequencies()
+                .stream().map(id -> serviceFrequencyRepository
+                .findById(id).orElseThrow(() -> new BackendException("Service Frequency not found with id :"+id)))
+                .collect(Collectors.toList());
+        ProvidersEnrolledService providersEnrolledService = providerEnrolledServiceMapper.mapToModel(providersEnrolledServiceRequestDto,
+                serviceProvider, serviceType, serviceSubtype, serviceFrequencies);
+        ProvidersEnrolledService createdProvidersEnrolledService = providerEnrolledServiceRepository.save(providersEnrolledService);
+        return providerEnrolledServiceMapper.mapToDto(createdProvidersEnrolledService);
+    }
 
+    public void deleteProvidersEnrolledService(Long id){
+        try {
+            providerEnrolledServiceRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new BackendException("Provider enrolled service with given id doesn't exist.", e);
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.tp.serviceley.server.controller.admin;
 
+import com.tp.serviceley.server.dto.ProvidersEnrolledServiceRequestDto;
 import com.tp.serviceley.server.dto.ServiceProviderFileDto;
 import com.tp.serviceley.server.dto.ServiceProviderRequestDto;
 import com.tp.serviceley.server.exception.BackendException;
@@ -23,7 +24,6 @@ public class ServiceProviderController {
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){
-            System.out.println(e.getMessage());
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -35,7 +35,6 @@ public class ServiceProviderController {
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){
-            System.out.println(e.getMessage());
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -45,6 +44,31 @@ public class ServiceProviderController {
         try{
             serviceProviderService.deleteServiceProvider(id);
             return new ResponseEntity<>("Service provider deleted successfully.", HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/enroll")
+    public ResponseEntity<?> createProvidersEnrolledService(@RequestBody ProvidersEnrolledServiceRequestDto
+                                                               providersEnrolledServiceRequestDto){
+        try{
+            return new ResponseEntity<>(serviceProviderService.createProvidersEnrolledService
+                    (providersEnrolledServiceRequestDto), HttpStatus.CREATED);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/enroll/{id}")
+    public ResponseEntity<?> deleteProvidersEnrolledService(@PathVariable Long id){
+        try{
+            serviceProviderService.deleteProvidersEnrolledService(id);
+            return new ResponseEntity<>("Providers enrolled service deleted successfully.", HttpStatus.OK);
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){

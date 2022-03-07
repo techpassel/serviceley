@@ -31,7 +31,7 @@ public class ServiceProvider extends CreateUpdateRecord{
 
     private String qualification;
 
-    //Following all data are String type, but it will contain file location of documents(i.e. URL)
+    //Following all data are String type, but it will contain file location(i.e. URL) of documents
     private String qualificationCertificate;
 
     private String image1;
