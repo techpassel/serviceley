@@ -21,5 +21,6 @@ public class Staff extends CreateUpdateRecord{
     private User user;
 
     @Column(name = "staff_role")
+    @Enumerated(EnumType.STRING)
     private StaffRole staffRole;
 }

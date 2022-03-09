@@ -13,6 +13,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -151,6 +152,11 @@ public class ServiceProviderService {
                 .stream().map(id -> serviceFrequencyRepository
                 .findById(id).orElseThrow(() -> new BackendException("Service Frequency not found with id :"+id)))
                 .collect(Collectors.toList());
+        // CookingSpecialities field is applicable only for Cooking service subtype.So for all other subtypes we will
+        // store empty arraylist in it.
+        if(serviceSubtype.getSubtype() != "Cooking"){
+            providersEnrolledServiceRequestDto.setCookingSpecialities(new ArrayList<>());
+        }
         ProvidersEnrolledService providersEnrolledService = providerEnrolledServiceMapper.mapToModel(providersEnrolledServiceRequestDto,
                 serviceProvider, serviceType, serviceSubtype, serviceFrequencies);
         ProvidersEnrolledService createdProvidersEnrolledService = providerEnrolledServiceRepository.save(providersEnrolledService);

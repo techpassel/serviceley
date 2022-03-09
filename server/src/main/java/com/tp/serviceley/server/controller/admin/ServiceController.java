@@ -21,10 +21,8 @@ public class ServiceController {
     @RequestMapping(method = RequestMethod.POST, value = "")
     public ResponseEntity<?> createServiceType(@RequestBody ServiceType service){
         try {
-            HttpStatus status = service.getId() == null?HttpStatus.CREATED:HttpStatus.OK;
-            return new ResponseEntity<>(serviceService.createServiceType(service), status);
+            return new ResponseEntity<>(serviceService.createServiceType(service), HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e){
-            //Will be thrown in case on duplicate entry for unique type fields(i.e. service type in this case).
             return new ResponseEntity<>("Service type already exist.", HttpStatus.BAD_REQUEST);
         } catch (Exception e){
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
