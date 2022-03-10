@@ -1,10 +1,12 @@
 package com.tp.serviceley.server.controller;
 
 import com.tp.serviceley.server.dto.LoginRequestDto;
+import com.tp.serviceley.server.dto.ResetPasswordRequestDto;
 import com.tp.serviceley.server.dto.SignupRequestDto;
 import com.tp.serviceley.server.exception.BackendException;
+import com.tp.serviceley.server.model.User;
 import com.tp.serviceley.server.model.enums.UserType;
-import com.tp.serviceley.server.service.AuthService;
+import com.tp.serviceley.server.service.auth.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -69,6 +72,41 @@ public class AuthController {
         try {
             String email = data.get("email");
             return new ResponseEntity<>(authService.resendActivationEmail(email), HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/forget-password")
+    public ResponseEntity<?> createForgetPassword(@RequestBody Map<String, String> userdata){
+        try{
+            String email = userdata.get("email");
+            return new ResponseEntity<>(authService.createForgetPassword(email), HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/reset-password/{token}")
+    public ResponseEntity<?> verifyResetPasswordToken(@PathVariable String token){
+        try{
+            User user= authService.verifyResetPasswordToken(token).getUser();
+            return new ResponseEntity<>(user.getId(), HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetToken(@RequestBody ResetPasswordRequestDto resetPasswordRequestDto){
+        try{
+            return new ResponseEntity<>(authService.resetPassword(resetPasswordRequestDto), HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         } catch (Exception e){
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }

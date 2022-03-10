@@ -30,7 +30,7 @@ public class StaffController {
     public ResponseEntity<?> deleteServiceType(@PathVariable Long id){
         try{
             staffService.deleteStaff(id);
-            return new ResponseEntity<>("Service type deleted successfully.", HttpStatus.OK);
+            return new ResponseEntity<>("Staff deleted successfully.", HttpStatus.OK);
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){

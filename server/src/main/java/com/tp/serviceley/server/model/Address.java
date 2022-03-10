@@ -48,4 +48,7 @@ public class Address {
 
     @Column(name = "gps_details")
     private String gpsDetails;
+
+    @Column(name = "is_default")
+    private Boolean isDefaultAddress;
 }

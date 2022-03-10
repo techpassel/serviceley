@@ -1,4 +1,4 @@
-package com.tp.serviceley.server.service;
+package com.tp.serviceley.server.service.auth;
 
 import com.tp.serviceley.server.model.User;
 import com.tp.serviceley.server.model.auth.AuthUserDetails;

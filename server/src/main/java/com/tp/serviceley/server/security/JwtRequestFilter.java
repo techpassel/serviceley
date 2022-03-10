@@ -1,5 +1,5 @@
 package com.tp.serviceley.server.security;
-import com.tp.serviceley.server.service.UserDetailsServiceImpl;
+import com.tp.serviceley.server.service.auth.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

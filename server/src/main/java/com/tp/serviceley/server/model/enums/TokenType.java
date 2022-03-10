@@ -3,7 +3,8 @@ package com.tp.serviceley.server.model.enums;
 public enum TokenType {
     AccountActivation("accountActivation"),
     PhoneVerificationOTP("phoneVerificationOTP"),
-    EmailUpdateVerification("emailUpdateVerification");
+    EmailUpdateVerification("emailUpdateVerification"),
+    ResetPasswordVerification("resetPasswordVerification");
 
     private String type;
 
