@@ -12,6 +12,7 @@ import com.tp.serviceley.server.model.VerificationToken;
 import com.tp.serviceley.server.repository.UserRepository;
 import com.tp.serviceley.server.repository.VerificationTokenRepository;
 import com.tp.serviceley.server.security.JwtProvider;
+import com.tp.serviceley.server.service.CommonService;
 import com.tp.serviceley.server.service.MailContentBuilder;
 import com.tp.serviceley.server.service.MailService;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
+    private final CommonService commonService;
 
     @Transactional
     public void signup(SignupRequestDto signupRequestDto){
@@ -72,27 +74,15 @@ public class AuthService {
     }
 
     private void sendAccountActivationEmail(User user){
-        String token = generateVerificationToken(user, TokenType.AccountActivation);
+        String token = commonService.generateVerificationToken(user, TokenType.AccountActivation);
         String url = "http://localhost:8080/api/auth/account-verification/"+token;
         String btnName = "Activate";
         String text = "Thanks for signing up on serviceley. Please click on the button below to activate your account.";
         String msg = mailContentBuilder.build(text, url, btnName);
 
-        String successResponse = "Activation email sent!";
         String subject = "Please Activate your account.";
         String recipient = user.getEmail();
-        mailService.sendMail(new NotificationEmail(subject, recipient, msg, successResponse));
-    }
-
-    private String generateVerificationToken(User user, TokenType tokenType){
-        String token = UUID.randomUUID().toString();
-        VerificationToken verificationToken = new VerificationToken();
-        verificationToken.setToken(token);
-        verificationToken.setTokenType(tokenType);
-        verificationToken.setUser(user);
-        verificationToken.setCreatedAt(LocalDateTime.now());
-        verificationTokenRepository.save(verificationToken);
-        return token;
+        mailService.sendMail(new NotificationEmail(subject, recipient, msg));
     }
 
     @Transactional
@@ -143,15 +133,14 @@ public class AuthService {
     }
 
     private void sendForgetPasswordEmail(User user){
-        String token = generateVerificationToken(user, TokenType.ResetPasswordVerification);
+        String token = commonService.generateVerificationToken(user, TokenType.ResetPasswordVerification);
         String url = "http://localhost:8080/api/auth/reset-password/"+token;
         String btnName = "Reset";
         String text = "Please click on the button below to reset your password.";
         String msg = mailContentBuilder.build(text, url, btnName);
-        String successResponse = "Password reset successfully.";
         String subject = "Reset your serviceley password.";
         String recipient = user.getEmail();
-        mailService.sendMail(new NotificationEmail(subject, recipient, msg, successResponse));
+        mailService.sendMail(new NotificationEmail(subject, recipient, msg));
     }
 
     public VerificationToken verifyResetPasswordToken(String token){

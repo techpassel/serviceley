@@ -37,9 +37,7 @@ public class MailService {
             mimeMessageHelper.setFrom(new InternetAddress(senderEmail, applicationName));
             mimeMessageHelper.setTo(notificationEmail.getRecipient());
             mimeMessageHelper.setText(notificationEmail.getBody(), true);
-
             mailSender.send(mimeMessageHelper.getMimeMessage());
-//            log.info("");
         } catch (MessagingException | UnsupportedEncodingException e) {
             throw new BackendException("Error occurred while sending email to user", e);
         }

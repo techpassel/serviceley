@@ -30,7 +30,7 @@ public class User extends CreateUpdateRecord{
 
     @Column(unique = true)
     @Size(max = 10, min = 10)
-    private Integer phone;
+    private Long phone;
 
     @Email(message = "Email should be valid")
     @NotEmpty(message = "Email is required")
