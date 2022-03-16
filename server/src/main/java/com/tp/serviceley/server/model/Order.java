@@ -2,12 +2,14 @@ package com.tp.serviceley.server.model;
 
 import com.tp.serviceley.server.model.enums.OrderStatus;
 import com.tp.serviceley.server.model.enums.PaymentStatus;
+import com.tp.serviceley.server.model.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -29,7 +31,13 @@ public class Order extends CreateUpdateRecord{
     @JoinColumn(name = "user_id")
     private User user;
 
-    //Check Cart model for details of estimatedAmount and estimatedMonthlyAmount
+    @Column(name = "payment_type")
+    private PaymentType paymentType;
+
+    // In Cart Model we have not used these fields - estimatedAmount and estimatedMonthlyAmount
+    // But we will show these fields to user on cart page and when user will confirm the order we will
+    // save that in order table also. We will show either estimatedAmount or estimatedMonthlyAmount based on
+    // the selected PaymentType i.e. one of them will be 0.
     @Column(name = "estimated_amount")
     private Integer estimatedAmount;
 
@@ -47,25 +55,21 @@ public class Order extends CreateUpdateRecord{
     private Coupon coupon;
 
     @Column(name = "coupon_remaining_months")
-    private Integer couponMonths;
-
-    @ManyToOne
-    @JoinColumn(name = "offer_id")
-    private Offer offer;
+    private Integer couponRemainingMonths;
 
     @ManyToOne
     @JoinColumn(name = "special_discount_id")
     private SpecialDiscount specialDiscount;
 
     @Column(name = "special_discount_remaining_months")
-    private Integer specialDiscountMonths;
-
-    @Column(name = "service_from_date")
-    private LocalDate serviceFromDate;
-
-    @Column(name = "service_upto_date")
-    private LocalDate serviceUptoDate;
+    private Integer specialDiscountRemainingMonths;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderItem> items;
+
+    @Column(name = "approved_on")
+    private LocalDateTime approvedOn;
+
+    @Column(name = "service_active_on")
+    private LocalDateTime serviceActiveOn;
 }

@@ -28,23 +28,24 @@ public class Offer extends CreateUpdateRecord{
     private ServiceType serviceType;
 
     @ManyToOne
-    @JoinColumn(name = "service_subtype_id")
+    @JoinColumn(name = "service_subtype_id", nullable = false)
     private ServiceSubtype serviceSubtype;
 
-    @Column(name = "minimum_order_value")
+    @Column(name = "minimum_order_value", nullable = false)
     private Integer minimumOrderValue = -1;
 
-    @Column(name = "minimum_order_month")
+    @Column(name = "minimum_order_month", nullable = false)
     private Integer minimumOrderMonth = -1;
 
-    private Double amount;
+    @Column(nullable = false)
+    private Integer amount;
 
-    @Column(name = "amount_in")
+    @Column(name = "amount_in", nullable = false)
     private OfferAmountType amountIn;
     // Offer can be in rupees, dollar or percentage
     // So, for 5% discount we will store amount as 5 and amountIn as Percentage
 
-    @Column(name = "expiry_date")
+    @Column(name = "expiry_date", nullable = false)
     private LocalDateTime expiryDate;
 
     @ManyToOne

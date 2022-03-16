@@ -1,5 +1,6 @@
 package com.tp.serviceley.server.dto;
 
+import com.tp.serviceley.server.model.ServiceType;
 import com.tp.serviceley.server.model.dto_related.DtoServiceSubtype;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ServiceFrequencyResponseDto {
     private Long id;
+    private ServiceType serviceType;
     private DtoServiceSubtype serviceSubtype;
     private String frequency;
     private String frequencyDetails;

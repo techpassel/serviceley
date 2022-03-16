@@ -22,6 +22,10 @@ public class ServiceFrequency {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_type_id")
+    private ServiceType serviceType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "service_subtype_id", nullable = false)
     private ServiceSubtype serviceSubtype;
 

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ServiceFrequencyRequestDto {
     private Long id;
+    private Long serviceType;
     private Long serviceSubtypeId;
     private String frequency;
     private String frequencyDetails;

@@ -1,5 +1,6 @@
 package com.tp.serviceley.server.model;
 
+import com.tp.serviceley.server.model.enums.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,21 +14,17 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "cart")
 public class Cart extends CreateUpdateRecord{
-    // Unlike other apps where one user have only one cart, in our app one user can have multiple carts.
-    // In fact for every "Main" ServiceOfferingType we will create a separate cart.
-    // And for every cart we will create a separate order. Every Cart will have its own offer, coupon etc.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "offer_id")
-    private Offer offer;
-
+    // Here we have created fields for Coupon and SpecialDiscount but not for Offer.
+    // It's because offer is meant for per service subtype.So we will use that in CartItem
+    // rather than in Cart
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "coupon_id")
     private Coupon coupon;
@@ -36,12 +33,8 @@ public class Cart extends CreateUpdateRecord{
     @JoinColumn(name = "special_discount_id")
     private SpecialDiscount specialDiscount;
 
-    @Column(name = "service_from_date")
-    private LocalDate serviceFromDate;
-
-    @Column(name = "service_upto_date")
-    private LocalDate serviceUptoDate;
-    //serviceUpto date can be maximum 12 months after the serviceFromDate.
+    @Column(name = "payment_type")
+    private PaymentType paymentType;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "cart")
     private List<CartItem> items;
