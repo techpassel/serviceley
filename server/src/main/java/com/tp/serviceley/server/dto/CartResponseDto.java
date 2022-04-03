@@ -16,8 +16,6 @@ import java.util.List;
 public class CartResponseDto {
     private Long id;
     private DtoUser user;
-    private DtoCoupon coupon;
-    private DtoSpecialDiscount specialDiscountId;
     private PaymentType paymentType;
     private List<CartItemResponseDto> items;
 }

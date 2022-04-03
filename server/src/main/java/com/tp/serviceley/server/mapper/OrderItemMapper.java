@@ -24,7 +24,7 @@ public abstract class OrderItemMapper {
     @Mapping(target = "serviceUnit", source = "serviceUnit")
     @Mapping(target = "serviceFrequency", source = "serviceFrequency")
     @Mapping(target = "offer", source = "offer")
-    public abstract OrderItem mapToModel(OrderItemRequestDto orderItemRequestDto, Order order, ServiceSubtype
+    public abstract OrderItem mapToModel(OrderItemRequestDto orderItemRequestDto, Order order, ServiceType
             serviceType, ServiceSubtype serviceSubtype, ServiceUnit serviceUnit, ServiceFrequency serviceFrequency,
                                          Offer offer);
 

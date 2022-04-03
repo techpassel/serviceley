@@ -49,7 +49,7 @@ public class Coupon extends CreateUpdateRecord{
     @Column(name = "is_applicable_for_all")
     private Boolean isApplicableForAll;
     // If isApplicableForAll is true then it wil be applicable for all users otherwise
-    // An entry should be created in UserCoupon table for every user whom you want to assign this coupon.
+    // An entry should be created in UserCoupon table for every user whom this coupon is assigned.
 
     @ManyToOne
     @JoinColumn(name = "created_by", nullable = false, updatable = false)

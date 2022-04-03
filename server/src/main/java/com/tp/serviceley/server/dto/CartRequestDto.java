@@ -15,8 +15,6 @@ import java.util.List;
 public class CartRequestDto {
     private Long id;
     private Long userId;
-    private Long couponId;
-    private Long specialDiscountId;
     private PaymentType paymentType;
     private List<CartItemRequestDto> items;
 }

@@ -70,6 +70,27 @@ public class Order extends CreateUpdateRecord{
     @Column(name = "approved_on")
     private LocalDateTime approvedOn;
 
+    @Column(name = "activated_on")
+    private LocalDateTime activatedOn;
+
     @Column(name = "service_active_on")
-    private LocalDateTime serviceActiveOn;
+    private LocalDateTime cancellationRequestedOn;
+
+    @Column(name = "service_active_on")
+    private LocalDateTime cancelledOn;
+    // Only staff can cancel an order.He/she can do so only in case user requested for it or in case of some kind of issue
+    // between company and user like user is not paying for services or user misbehaved with service provider or user
+    // is not following terms and conditions. In case order is cancelled due to any issue between company and user,
+    // the issue must be stored in details in cancellationRemark. In case user have requested for it then cancellation
+    // remark is optional and user can also send details that why he/she is cancelling order in cancellationRequestRemark.
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cancelled_by")
+    private User cancelledBy;
+
+    @Column(columnDefinition = "TEXT", name = "cancellation_request_remark")
+    private String cancellationRequestRemark;
+
+    @Column(columnDefinition = "TEXT", name = "cancellation_remark")
+    private String cancellationRemark;
 }

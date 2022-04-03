@@ -4,6 +4,7 @@ public enum OrderStatus {
     Created("created"),
     Approved("approved"),
     Declined("declined"),
+    CancellationRequested("cancellationRequested"),
     Cancelled("cancelled"),
     Active("active"),
     Completed("completed");

@@ -3,11 +3,14 @@ package com.tp.serviceley.server.controller.admin;
 import com.tp.serviceley.server.dto.StaffRequestDto;
 import com.tp.serviceley.server.exception.BackendException;
 import com.tp.serviceley.server.service.admin.StaffService;
+import com.tp.serviceley.server.service.user.OrderService;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/staff")
@@ -27,7 +30,7 @@ public class StaffController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public ResponseEntity<?> deleteServiceType(@PathVariable Long id){
+    public ResponseEntity<?> deleteStaff(@PathVariable Long id){
         try{
             staffService.deleteStaff(id);
             return new ResponseEntity<>("Staff deleted successfully.", HttpStatus.OK);

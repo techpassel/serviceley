@@ -23,32 +23,17 @@ public abstract class CartMapper {
 
     @Mapping(target = "id", source = "cartRequestDto.id")
     @Mapping(target = "user", source = "user")
-    @Mapping(target = "coupon", source = "coupon")
-    @Mapping(target = "specialDiscount", source = "specialDiscount")
     @Mapping(target = "items", source = "items")
     public abstract Cart mapToModel(CartRequestDto cartRequestDto, User user, Coupon coupon,
                                     SpecialDiscount specialDiscount, List<CartItem> items);
 
     @Mapping(target = "user", expression = "java(getDtoUser(cart))")
-    @Mapping(target = "coupon", expression = "java(getDtoCoupon(cart))")
-    @Mapping(target = "specialDiscount", expression = "java(getDtoSpecialDiscount(cart))")
     @Mapping(target = "items", expression = "java(getCartItems(cart))")
     public abstract CartResponseDto mapToDto(Cart cart);
 
     DtoUser getDtoUser(Cart cart){
         User user = cart.getUser();
         return new DtoUser(user.getId(), user.getFirstName(), user.getLastName());
-    }
-
-    DtoCoupon getDtoCoupon(Cart cart){
-        Coupon coupon = cart.getCoupon();
-        return new DtoCoupon(coupon.getId(), coupon.getCode(), coupon.getAmount(), coupon.getAmountIn());
-    }
-
-    DtoSpecialDiscount getDtoSpecialDiscount(Cart cart){
-        SpecialDiscount specialDiscount = cart.getSpecialDiscount();
-        return new DtoSpecialDiscount(specialDiscount.getId(), specialDiscount.getCode(), specialDiscount.getAmount(),
-                specialDiscount.getAmountIn());
     }
 
     List<CartItemResponseDto> getCartItems(Cart cart){

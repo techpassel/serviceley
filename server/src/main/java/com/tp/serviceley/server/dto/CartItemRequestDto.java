@@ -14,9 +14,9 @@ public class CartItemRequestDto {
     private Long cartId;
     private Long serviceTypeId;
     private Long serviceSubtypeId;
-    private Long offerId;
+    private Integer quantity;
     private Long serviceUnitId;
-    private Long serviceFrequency;
+    private Long serviceFrequencyId;
     private LocalDate serviceFromDate;
     private LocalDate serviceUptoDate;
 }

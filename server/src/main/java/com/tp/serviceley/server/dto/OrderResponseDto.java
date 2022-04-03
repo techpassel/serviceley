@@ -29,7 +29,9 @@ public class OrderResponseDto {
     private Integer specialDiscountRemainingMonths;
     private List<OrderItemResponseDto> items;
     private LocalDateTime approvedOn;
-    private LocalDateTime serviceActiveOn;
+    private LocalDateTime activatedOn;
+    private LocalDateTime cancellationRequestedOn;
+    private LocalDateTime cancelledOn;
     private LocalDateTime createdOn;
     private LocalDateTime updatedOn;
 }

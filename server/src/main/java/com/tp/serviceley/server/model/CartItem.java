@@ -27,10 +27,10 @@ public class CartItem {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_subtype_id")
     private ServiceSubtype serviceSubtype;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "offer_id")
-    private Offer offer;
+    //We have not created field "offer" here but best applicable offer must be applied to every cartItem
+    //And even should be shown to user on Client side and when user confirms the order applied offer must 
+    //be stored in orderItems.
+    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_unit_id")

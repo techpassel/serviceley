@@ -22,16 +22,9 @@ public class Cart extends CreateUpdateRecord{
     @JoinColumn(name = "user_id")
     private User user;
 
-    // Here we have created fields for Coupon and SpecialDiscount but not for Offer.
-    // It's because offer is meant for per service subtype.So we will use that in CartItem
-    // rather than in Cart
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "coupon_id")
-    private Coupon coupon;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "special_discount_id")
-    private SpecialDiscount specialDiscount;
+    // Here we haven't created fields for Coupon and SpecialDiscount, but we will show these values in client side.
+    // But we will not do that for offers. It's because offer is meant for per service subtype.
+    // So we will use that in CartItem rather than in Cart.
 
     @Column(name = "payment_type")
     private PaymentType paymentType;

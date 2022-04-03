@@ -15,6 +15,7 @@ import com.tp.serviceley.server.security.JwtProvider;
 import com.tp.serviceley.server.service.CommonService;
 import com.tp.serviceley.server.service.MailContentBuilder;
 import com.tp.serviceley.server.service.MailService;
+import com.tp.serviceley.server.service.user.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +40,7 @@ public class AuthService {
     private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
     private final CommonService commonService;
+    private final CartService cartService;
 
     @Transactional
     public void signup(SignupRequestDto signupRequestDto){
@@ -108,6 +110,7 @@ public class AuthService {
         user.setActive(true);
         user.setEmailVerified(true);
         userRepository.save(user);
+        cartService.createCart(user);
         verificationTokenRepository.deleteById(verificationToken.getId());
     }
 

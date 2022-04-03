@@ -20,7 +20,7 @@ public class CartItemResponseDto {
     private Long cartId;
     private ServiceType serviceType;
     private DtoServiceSubtype serviceSubtype;
-    private DtoOffer offer;
+    private Integer quantity;
     private DtoServiceUnit serviceUnit;
     private DtoServiceFrequency serviceFrequency;
     private LocalDate serviceFromDate;
