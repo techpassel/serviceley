@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class DtoServiceFrequency {
     private Long id;
     private String frequency;
+    private String frequencyDetails;
 }

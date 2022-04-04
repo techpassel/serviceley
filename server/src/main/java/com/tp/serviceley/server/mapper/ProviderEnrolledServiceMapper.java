@@ -43,7 +43,7 @@ public abstract class ProviderEnrolledServiceMapper {
 
     public List<DtoServiceFrequency> getDtoServiceFrequencies(ProvidersEnrolledService providersEnrolledService){
         return providersEnrolledService.getSuitableFrequencies().stream().map(d -> new DtoServiceFrequency
-                (d.getId(), d.getFrequency())).collect(Collectors.toList());
+                (d.getId(), d.getFrequency(), d.getFrequencyDetails())).collect(Collectors.toList());
     }
 
 

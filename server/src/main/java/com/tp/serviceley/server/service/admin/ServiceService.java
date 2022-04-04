@@ -48,7 +48,7 @@ public class ServiceService {
 
     public ServiceSubtypeResponseDto createServiceSubtype(ServiceSubtypeRequestDto serviceSubtypeRequestDto) {
         Optional<ServiceSubtype> optionalServiceSubtype = serviceSubtypeRepository.
-                findByTypeAndSubtype(serviceSubtypeRequestDto.getTypeId(), serviceSubtypeRequestDto.getSubtype());
+                findByTypeIdAndSubtype(serviceSubtypeRequestDto.getTypeId(), serviceSubtypeRequestDto.getSubtype());
         if (optionalServiceSubtype.isPresent()) {
             if (serviceSubtypeRequestDto.getId() == null) throw new BackendException("Service Subtype already exist.");
             else {
@@ -105,7 +105,8 @@ public class ServiceService {
         if(serviceFrequencies.size() > 0){
             if(serviceFrequencyRequestDto.getId() == null) throw new BackendException("Service frequency already exist.");
             else {
-                Long matchingServiceFrequencies = serviceFrequencies.stream().filter(v -> v.getId() == serviceFrequencyRequestDto.getId()).count();
+                Long matchingServiceFrequencies = serviceFrequencies.stream().filter(v -> v.getId() ==
+                        serviceFrequencyRequestDto.getId()).count();
                 if(matchingServiceFrequencies == 0) throw new BackendException("Some other service frequency " +
                         "with same service subtype and frequency already exist.");
             }

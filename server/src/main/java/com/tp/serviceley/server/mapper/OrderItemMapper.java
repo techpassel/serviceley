@@ -50,12 +50,14 @@ public abstract class OrderItemMapper {
 
     DtoServiceUnit getDtoServiceUnit(OrderItem orderItem) {
         ServiceUnit serviceUnit = orderItem.getServiceUnit();
-        return new DtoServiceUnit(serviceUnit.getId(), serviceUnit.getUnitLimit(), serviceUnit.getServiceUnitMeasure());
+        return new DtoServiceUnit(serviceUnit.getId(), serviceUnit.getUnitLimit(), serviceUnit.getServiceUnitType(),
+                serviceUnit.getServiceUnitMeasure());
     }
 
     DtoServiceFrequency getDtoServiceFrequency(OrderItem orderItem) {
         ServiceFrequency serviceFrequency = orderItem.getServiceFrequency();
-        return new DtoServiceFrequency(serviceFrequency.getId(), serviceFrequency.getFrequency());
+        return new DtoServiceFrequency(serviceFrequency.getId(), serviceFrequency.getFrequency(),
+                serviceFrequency.getFrequencyDetails());
     }
 
     DtoOffer getDtoOffer(OrderItem orderItem) {

@@ -42,11 +42,13 @@ public abstract class CartItemMapper {
 
     DtoServiceUnit getDtoServiceUnit(CartItem cartItem){
         ServiceUnit serviceUnit = cartItem.getServiceUnit();
-        return new DtoServiceUnit(serviceUnit.getId(), serviceUnit.getUnitLimit(), serviceUnit.getServiceUnitMeasure());
+        return new DtoServiceUnit(serviceUnit.getId(), serviceUnit.getUnitLimit(), serviceUnit.getServiceUnitType(),
+                serviceUnit.getServiceUnitMeasure());
     }
 
     DtoServiceFrequency getDtoServiceFrequency(CartItem cartItem){
         ServiceFrequency serviceFrequency = cartItem.getServiceFrequency();
-        return new DtoServiceFrequency(serviceFrequency.getId(), serviceFrequency.getFrequency());
+        return new DtoServiceFrequency(serviceFrequency.getId(), serviceFrequency.getFrequency(),
+                serviceFrequency.getFrequencyDetails());
     }
 }
