@@ -24,6 +24,8 @@ public abstract class CartMapper {
     @Mapping(target = "id", source = "cartRequestDto.id")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "items", source = "items")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     public abstract Cart mapToModel(CartRequestDto cartRequestDto, User user, Coupon coupon,
                                     SpecialDiscount specialDiscount, List<CartItem> items);
 

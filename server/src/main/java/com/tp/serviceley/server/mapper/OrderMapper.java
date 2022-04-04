@@ -28,6 +28,8 @@ public abstract class OrderMapper {
     @Mapping(target = "coupon", source = "coupon")
     @Mapping(target = "specialDiscount", source = "specialDiscount")
     @Mapping(target = "items", source = "items")
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
     public abstract Order mapToModel(OrderRequestDto orderRequestDto, User user, Coupon coupon, SpecialDiscount
             specialDiscount, List<OrderItem> items);
 

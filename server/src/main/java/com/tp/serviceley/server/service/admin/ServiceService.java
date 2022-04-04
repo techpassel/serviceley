@@ -110,11 +110,13 @@ public class ServiceService {
                         "with same service subtype and frequency already exist.");
             }
         }
+        ServiceType serviceType = serviceTypeRepository.findById(serviceFrequencyRequestDto.getServiceTypeId())
+                .orElseThrow(() -> new BackendException("Service type with given id doesn't exist."));
         ServiceSubtype serviceSubtype = serviceSubtypeRepository.findById(serviceFrequencyRequestDto.
                 getServiceSubtypeId()).orElseThrow(() ->
                 new BackendException("Service subtype with given id doesn't exist."));
         ServiceFrequency serviceFrequency = serviceFrequencyRepository.save(serviceFrequencyMapper.
-                mapToModel(serviceFrequencyRequestDto, serviceSubtype));
+                mapToModel(serviceFrequencyRequestDto, serviceType, serviceSubtype));
         return serviceFrequencyMapper.mapToDto(serviceFrequency);
     }
 

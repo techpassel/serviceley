@@ -25,7 +25,7 @@ public abstract class CartItemMapper {
             serviceType, ServiceSubtype serviceSubtype, ServiceUnit serviceUnit, ServiceFrequency
             serviceFrequency);
 
-    @Mapping(target = "cartId", source = "java(getCartId(cartItem))")
+    @Mapping(target = "cartId", expression = "java(getCartId(cartItem))")
     @Mapping(target = "serviceSubtype", expression = "java(getDtoServiceSubtype(cartItem))")
     @Mapping(target = "serviceUnit", expression = "java(getDtoServiceUnit(cartItem))")
     @Mapping(target = "serviceFrequency", expression = "java(getDtoServiceFrequency(cartItem))")

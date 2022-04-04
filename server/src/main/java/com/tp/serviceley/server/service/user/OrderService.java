@@ -56,7 +56,8 @@ public class OrderService {
                     .orElseThrow(() -> new BackendException("Service frequency not found for order item" + item.getId()));
             Offer offer = offerRepository.findById(item.getOfferId()).orElseThrow(() -> new BackendException
                     ("Offer not found"));
-            return orderItemMapper.mapToModel(item, order, serviceType, serviceSubtype, serviceUnit, serviceFrequency, offer);
+            return orderItemMapper.mapToModel(item, order, serviceType, serviceSubtype, serviceUnit, serviceFrequency, offer, null, null);
+            //Since service provider and staff will be assigned later, so we are passing null for them here.
         }).collect(Collectors.toList());
         order.setItems(orderItems);
         return orderMapper.mapToDto(orderRepository.save(order));

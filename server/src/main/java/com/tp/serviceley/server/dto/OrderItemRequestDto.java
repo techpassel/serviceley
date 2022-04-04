@@ -20,8 +20,8 @@ public class OrderItemRequestDto {
     private Long OfferDiscount;
     private LocalDate serviceFromDate;
     private LocalDate serviceUptoDate;
-    private Long assignedServiceProvider;
-    private Long assignedStaff;
+    private Long assignedServiceProviderId;
+    private Long assignedStaffId;
     private String shiftTiming1;
     private String shiftTiming2;
     private String shiftTiming3;

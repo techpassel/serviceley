@@ -73,10 +73,10 @@ public class Order extends CreateUpdateRecord{
     @Column(name = "activated_on")
     private LocalDateTime activatedOn;
 
-    @Column(name = "service_active_on")
+    @Column(name = "cancellation_requested_on")
     private LocalDateTime cancellationRequestedOn;
 
-    @Column(name = "service_active_on")
+    @Column(name = "cancelled_on")
     private LocalDateTime cancelledOn;
     // Only staff can cancel an order.He/she can do so only in case user requested for it or in case of some kind of issue
     // between company and user like user is not paying for services or user misbehaved with service provider or user

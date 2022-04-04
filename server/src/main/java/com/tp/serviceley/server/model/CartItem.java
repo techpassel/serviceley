@@ -22,7 +22,7 @@ public class CartItem {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_type_id")
-    private ServiceSubtype serviceType;
+    private ServiceType serviceType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_subtype_id")
