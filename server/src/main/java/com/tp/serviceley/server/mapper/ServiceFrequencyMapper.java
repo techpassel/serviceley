@@ -15,7 +15,6 @@ import org.mapstruct.ReportingPolicy;
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         componentModel = "spring")
 public abstract class ServiceFrequencyMapper {
-
     @Mapping(target = "id", source = "serviceFrequencyRequestDto.id")
     @Mapping(target = "serviceType", source = "serviceType")
     @Mapping(target = "serviceSubtype", source = "serviceSubtype")

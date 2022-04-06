@@ -46,5 +46,4 @@ public abstract class ProviderEnrolledServiceMapper {
                 (d.getId(), d.getFrequency(), d.getFrequencyDetails())).collect(Collectors.toList());
     }
 
-
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -44,11 +45,11 @@ public class OrderItem{
     @Column(name = "offer_discount")
     private Long OfferDiscount;
 
-    @Column(name = "service_from_date")
-    private LocalDate serviceFromDate;
+    @Column(name = "service_from")
+    private LocalDateTime serviceFrom;
 
-    @Column(name = "service_upto_date")
-    private LocalDate serviceUptoDate;
+    @Column(name = "service_upto")
+    private LocalDateTime serviceUpto;
     // serviceUpto date can be maximum 12 months after the serviceFromDate.
 
     // Staff will be assigned when order will be approved by some senior staff and then the responsibility of
@@ -61,12 +62,18 @@ public class OrderItem{
     @JoinColumn(name = "service_provider_id")
     private ServiceProvider assignedServiceProvider;
 
-    @Column(name = "shift_timing1")
-    private String shiftTiming1;
+    @Column(name = "slot_time1")
+    private String slotTime1;
 
-    @Column(name = "shift_timing2")
-    private String shiftTiming2;
+    @Column(name = "slot_time2")
+    private String slotTime2;
 
-    @Column(name = "shift_timing3")
-    private String shiftTiming3;
+    @Column(name = "slot_time3")
+    private String slotTime3;
+
+    @Column(name = "slot_time4")
+    private String slotTime4;
+
+    @Column(name = "slot_time5")
+    private String slotTime5;
 }

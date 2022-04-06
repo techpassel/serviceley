@@ -21,11 +21,15 @@ public class ServiceFeedback extends CreateUpdateRecord{
     private ServiceSubtype serviceSubtype;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_provider_id")
+    private ServiceProvider serviceProvider;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_item_id")
     private OrderItem orderItem;
 
     private String feedback;
 
-    @Column(name = "satisfaction_level")
-    private Integer satisfactionLevel;
+    @Column(name = "satisfaction_rating")
+    private Integer satisfactionRating;
 }

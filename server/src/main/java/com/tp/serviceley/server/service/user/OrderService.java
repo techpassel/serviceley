@@ -9,6 +9,7 @@ import com.tp.serviceley.server.mapper.OrderMapper;
 import com.tp.serviceley.server.model.*;
 import com.tp.serviceley.server.model.enums.OrderStatus;
 import com.tp.serviceley.server.repository.*;
+import com.tp.serviceley.server.service.CommonService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMapper orderMapper;
     private final OrderItemMapper orderItemMapper;
+    private final CommonService commonService;
 
     public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
         User user = userRepository.findById(orderRequestDto.getUserId()).orElseThrow(() -> new
@@ -43,7 +45,9 @@ public class OrderService {
         SpecialDiscount specialDiscount = specialDiscountRepository.findById(orderRequestDto.getSpecialDiscountId())
                 .orElseThrow(() -> new BackendException("Special discount not found."));
         List<OrderItem> orderItems = new ArrayList<>();
-        Order order = orderRepository.save(orderMapper.mapToModel(orderRequestDto, user, coupon, specialDiscount, orderItems));
+
+        Order order = orderRepository.save(orderMapper.mapToModel(orderRequestDto, commonService.generateDisplayOrderId(),
+                user, coupon, specialDiscount, orderItems));
         List<OrderItemRequestDto> requestOrderItems = orderRequestDto.getItems();
         orderItems = requestOrderItems.stream().map(item -> {
             ServiceType serviceType = serviceTypeRepository.findById(item.getServiceTypeId())

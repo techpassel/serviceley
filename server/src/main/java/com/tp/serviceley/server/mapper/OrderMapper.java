@@ -24,13 +24,14 @@ public abstract class OrderMapper {
     private OrderItemMapper orderItemMapper;
 
     @Mapping(target = "id", source = "orderRequestDto.id")
+    @Mapping(target = "displayOrderId", source = "displayOrderId")
     @Mapping(target = "user", source = "user")
     @Mapping(target = "coupon", source = "coupon")
     @Mapping(target = "specialDiscount", source = "specialDiscount")
     @Mapping(target = "items", source = "items")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    public abstract Order mapToModel(OrderRequestDto orderRequestDto, User user, Coupon coupon, SpecialDiscount
+    public abstract Order mapToModel(OrderRequestDto orderRequestDto, String displayOrderId, User user, Coupon coupon, SpecialDiscount
             specialDiscount, List<OrderItem> items);
 
     @Mapping(target = "user", expression = "java(getDtoUser(order))")

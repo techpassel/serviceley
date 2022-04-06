@@ -1,14 +1,11 @@
 package com.tp.serviceley.server.model;
 
+import com.tp.serviceley.server.model.enums.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Data
@@ -28,10 +25,21 @@ public class ComplainMessage extends CreateUpdateRecord{
     @JoinColumn(name = "user_id")
     private User user;
 
+    private UserType userType;
+
+    @Column(name = "is_internal_message")
+    private boolean isInternalMessage;
+    //Internal messages will not be displayed to users.
+
+    //'messageFor' field will be used for internal messages in case one staff wants to add message for another staff.
+    @ManyToOne
+    @JoinColumn(name = "message_for")
+    private Staff messageFor;
+
     @Column(columnDefinition = "TEXT", name = "message")
     private String message;
 
-    @Column(name = "file_paths")
-    @ElementCollection(targetClass = String.class)
-    private List<String> filePaths;
+    private String file1;
+    private String file2;
+    private String file3;
 }

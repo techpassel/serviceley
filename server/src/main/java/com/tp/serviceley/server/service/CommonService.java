@@ -11,7 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,23 +22,23 @@ public class CommonService {
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
 
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         User user = userRepository.findByEmail(userName).orElseThrow(() -> new BackendException("Invalid User Details."));
         return user;
     }
 
-    public String getFileExtension(String fileName){
+    public String getFileExtension(String fileName) {
         int i = fileName.lastIndexOf('.');
         if (i > 0) {
-            return "."+fileName.substring(i+1);
+            return "." + fileName.substring(i + 1);
         } else {
             throw new BackendException("File doesn't have any extension.");
         }
     }
 
-    public String generateVerificationToken(User user, TokenType tokenType){
+    public String generateVerificationToken(User user, TokenType tokenType) {
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
@@ -45,5 +47,11 @@ public class CommonService {
         verificationToken.setCreatedAt(LocalDateTime.now());
         verificationTokenRepository.save(verificationToken);
         return token;
+    }
+
+    public String generateDisplayOrderId() {
+        String[] tokenSplits = UUID.randomUUID().toString().toUpperCase().split("-");
+        String token = tokenSplits.length >= 2 ? tokenSplits[0] + tokenSplits[1] : tokenSplits[0];
+        return "SLEY-" + LocalDate.now() + "-" + token;
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -18,11 +19,13 @@ public class OrderItemRequestDto {
     private Long serviceFrequencyId;
     private Long offerId;
     private Long OfferDiscount;
-    private LocalDate serviceFromDate;
-    private LocalDate serviceUptoDate;
+    private LocalDateTime serviceFrom;
+    private LocalDateTime serviceUpto;
     private Long assignedServiceProviderId;
     private Long assignedStaffId;
-    private String shiftTiming1;
-    private String shiftTiming2;
-    private String shiftTiming3;
+    private String slotTime1;
+    private String slotTime2;
+    private String slotTime3;
+    private String slotTime4;
+    private String slotTime5;
 }

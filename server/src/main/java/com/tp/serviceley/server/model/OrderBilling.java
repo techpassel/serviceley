@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -16,6 +17,9 @@ public class OrderBilling {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "display_order_billing_id", unique = true)
+    private String displayOrderBillingId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
@@ -29,39 +33,40 @@ public class OrderBilling {
     @Column(name = "for_year")
     private Integer forYear;
 
-    @Column(name = "Service_from")
-    private LocalDate serviceFrom;
+    @Column(name = "service_from")
+    private LocalDateTime serviceFrom;
 
     @Column(name = "service_upto")
-    private LocalDate serviceUpto;
+    private LocalDateTime serviceUpto;
 
-    //paymentDeadlineDate should be 5 days after the bill is verified by some user.
-    //In case of complain, if staff find any issue in billing and update the bill then paymentDeadlineDate
-    //should also be updated to the date which is 5 days after the date of update.
+    /*
+        paymentDeadlineDate should be 5 days after the bill is verified by some user.
+        In case of complain, if staff find any issue in billing and update the bill then paymentDeadlineDate
+        should also be updated to the date which is 5 days after the date of update.
+    */
     @Column(name = "payment_deadline_date")
     private LocalDate paymentDeadlineDate;
 
-    //estimatedAmount or estimatedMonthlyAmount whichever has some value in Order table
-    //will be copied here.
+    //'estimatedAmount' or 'estimatedMonthlyAmount' whichever has some value in order table will be copied here.
     @Column(name = "estimated_amount")
     private Integer estimatedAmount;
-
-    @Column(name = "service_provider_leave")
-    private Integer serviceProviderLeave;
-
-    @Column(name = "customer_leave")
-    private Integer customerLeave;
 
     @Column(name = "deduction_for_leave")
     private Integer deductionForLeave;
 
     private Integer penalty;
 
-    @Column(name = "coupon_discount")
-    private Integer couponDiscount;
+    @Column(name = "coupon_discount_value")
+    private Integer couponDiscountValue;
 
-    @Column(name = "special_discount")
-    private Integer specialDiscount;
+    @Column(name = "special_discount_value")
+    private Integer specialDiscountValue;
+
+    @Column(name = "total_offer_discount_value")
+    private Integer totalOfferDiscountValue;
+
+    @Column(name = "final_amount")
+    private Integer finalAmount;
 
     /*
         Notes :-
@@ -74,15 +79,15 @@ public class OrderBilling {
          3.) Same should be followed in case a user complain about order billing. In case of resolving complaint the
          staff will need to update data only after getting consent from some senior staff member and how, when and from
          whom he got consent, he must store the information in updateRemark field.
-         4.)
     */
     @ManyToOne
-    @JoinColumn(name = "verified_by_userid")
+    @JoinColumn(name = "verified_by")
     private User verifiedBy;
 
     @ManyToOne
-    @JoinColumn(name = "updated_by_userid")
+    @JoinColumn(name = "updated_by")
     private User updatedBy;
 
+    @Column(name = "update_remark")
     private String updateRemark;
 }

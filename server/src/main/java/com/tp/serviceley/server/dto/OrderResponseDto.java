@@ -17,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderResponseDto {
     private Long id;
+    private String displayOrderId;
     private OrderStatus status;
     private DtoUser user;
     private Integer estimatedAmount;

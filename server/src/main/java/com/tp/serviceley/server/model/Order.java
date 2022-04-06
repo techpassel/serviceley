@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,6 +22,9 @@ public class Order extends CreateUpdateRecord{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "display_order_id", unique = true)
+    private String displayOrderId;
 
     @Column(name = "order_status")
     private OrderStatus status;

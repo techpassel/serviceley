@@ -1,6 +1,7 @@
 package com.tp.serviceley.server.model.enums;
 
 public enum BillingType {
+    OneTime("oneTime"),
     DailyBasis("dailyBasis"),
     MonthlyBasis("monthlyBasis");
 
