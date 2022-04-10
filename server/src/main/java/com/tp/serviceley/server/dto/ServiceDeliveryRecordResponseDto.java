@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServiceDeliverRecordResponseDto {
+public class ServiceDeliveryRecordResponseDto {
     private Long id;
     private DtoOrderItem orderItem;
     private LocalDate date;

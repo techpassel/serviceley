@@ -74,8 +74,8 @@ public class OrderService {
         if(order.getStatus() == OrderStatus.CancellationRequested){
             throw new BackendException("Order Cancellation is already requested. We are processing your request.");
         }
-        if(order.getStatus() == OrderStatus.CancellationRequested){
-            throw new BackendException("order is already cancelled.");
+        if(order.getStatus() == OrderStatus.Cancelled){
+            throw new BackendException("Order is already cancelled.");
         }
         order.setStatus(OrderStatus.CancellationRequested);
         order.setCancellationRequestRemark(remark);

@@ -1,6 +1,6 @@
 package com.tp.serviceley.server.mapper;
 
-import com.tp.serviceley.server.dto.ServiceDeliverRecordResponseDto;
+import com.tp.serviceley.server.dto.ServiceDeliveryRecordResponseDto;
 import com.tp.serviceley.server.dto.ServiceDeliveryRecordRequestDto;
 import com.tp.serviceley.server.model.OrderItem;
 import com.tp.serviceley.server.model.ServiceDeliveryRecord;
@@ -26,7 +26,7 @@ public abstract class ServiceDeliveryRecordMapper {
     @Mapping(target = "orderItem", expression = "java(getDtoOrderItem(serviceDeliveryRecord))")
     @Mapping(target = "serviceProvider", expression = "java(getDtoServiceProvider(serviceDeliveryRecord))")
     @Mapping(target = "staff", expression = "java(getDtoStaff(serviceDeliveryRecord))")
-    public abstract ServiceDeliverRecordResponseDto mapToDto(ServiceDeliveryRecord serviceDeliveryRecord);
+    public abstract ServiceDeliveryRecordResponseDto mapToDto(ServiceDeliveryRecord serviceDeliveryRecord);
 
     DtoOrderItem getDtoOrderItem(ServiceDeliveryRecord serviceDeliveryRecord){
         OrderItem orderItem = serviceDeliveryRecord.getOrderItem();
