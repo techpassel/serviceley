@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +20,15 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Slf4j
 public class ServiceProviderService {
-    ServiceProviderRepository serviceProviderRepository;
-    ServiceProviderMapper serviceProviderMapper;
-    FileUploadService fileUploadService;
-    UserRepository userRepository;
-    ServiceTypeRepository serviceTypeRepository;
-    ServiceSubtypeRepository serviceSubtypeRepository;
-    ServiceFrequencyRepository serviceFrequencyRepository;
-    ProviderEnrolledServiceRepository providerEnrolledServiceRepository;
-    ProviderEnrolledServiceMapper providerEnrolledServiceMapper;
+    private final ServiceProviderRepository serviceProviderRepository;
+    private final ServiceProviderMapper serviceProviderMapper;
+    private final FileUploadService fileUploadService;
+    private final UserRepository userRepository;
+    private final ServiceTypeRepository serviceTypeRepository;
+    private final ServiceSubtypeRepository serviceSubtypeRepository;
+    private final ServiceFrequencyRepository serviceFrequencyRepository;
+    private final ProviderEnrolledServiceRepository providerEnrolledServiceRepository;
+    private final ProviderEnrolledServiceMapper providerEnrolledServiceMapper;
 
     //private Logger logger = LoggerFactory.getLogger(ServiceProviderService.class);
     //Since we have used @Slf4j annotation, so we don't need to create Logger manually. Spring will do it for us.
@@ -58,19 +57,19 @@ public class ServiceProviderService {
             }
         }
 
-        String qualificationCertificate = getUploadedFileString(keyName + "/cert", serviceProviderRequestDto.getQualificationCertificate());
-        String image1 = getUploadedFileString(keyName + "/image1", serviceProviderRequestDto.getImage1());
-        String image2 = getUploadedFileString(keyName + "/image2", serviceProviderRequestDto.getImage2());
-        String image3 = getUploadedFileString(keyName + "/image3", serviceProviderRequestDto.getImage3());
-        String idProof = getUploadedFileString(keyName + "/idProof", serviceProviderRequestDto.getIdProof());
-        String addressProof = getUploadedFileString(keyName + "/addressProof", serviceProviderRequestDto.getAddressProof());
+        String qualificationCertificate = fileUploadService.getUploadedFileString(keyName + "/cert", serviceProviderRequestDto.getQualificationCertificate());
+        String image1 = fileUploadService.getUploadedFileString(keyName + "/image1", serviceProviderRequestDto.getImage1());
+        String image2 = fileUploadService.getUploadedFileString(keyName + "/image2", serviceProviderRequestDto.getImage2());
+        String image3 = fileUploadService.getUploadedFileString(keyName + "/image3", serviceProviderRequestDto.getImage3());
+        String idProof = fileUploadService.getUploadedFileString(keyName + "/idProof", serviceProviderRequestDto.getIdProof());
+        String addressProof = fileUploadService.getUploadedFileString(keyName + "/addressProof", serviceProviderRequestDto.getAddressProof());
         ServiceProvider serviceProvider = serviceProviderMapper.mapToModel(serviceProviderRequestDto, user, qualificationCertificate,
                 image1, image2, image3, idProof, addressProof);
         ServiceProvider createdServiceProvider = serviceProviderRepository.save(serviceProvider);
         return serviceProviderMapper.mapToDto(createdServiceProvider);
     }
 
-    //This API is meant for updating file type fields only.For update of rest fields above api will be used
+    //This API is meant for updating file type fields only.For update of rest fields above api will be used.
     public ServiceProviderResponseDto updateServiceProviderFile(ServiceProviderFileDto serviceProviderFileDto) {
         ServiceProvider serviceProvider = serviceProviderRepository.findById(serviceProviderFileDto.getId()).
                 orElseThrow(() -> new BackendException("Service provider not found"));
@@ -80,44 +79,33 @@ public class ServiceProviderService {
         switch (serviceProviderFileDto.getKey()){
             case "qualificationCertificate":
                 oldFilePath = serviceProvider.getQualificationCertificate();
-                serviceProvider.setQualificationCertificate(getUploadedFileString(keyName+"/cert", serviceProviderFileDto.getFile()));
+                serviceProvider.setQualificationCertificate(fileUploadService.getUploadedFileString(keyName+"/cert", serviceProviderFileDto.getFile()));
                 break;
             case "image1":
                 oldFilePath = serviceProvider.getImage1();
-                serviceProvider.setImage1(getUploadedFileString(keyName+"/image1", serviceProviderFileDto.getFile()));
+                serviceProvider.setImage1(fileUploadService.getUploadedFileString(keyName+"/image1", serviceProviderFileDto.getFile()));
                 break;
             case "image2":
                 oldFilePath = serviceProvider.getImage2();
-                serviceProvider.setImage2(getUploadedFileString(keyName+"/image2", serviceProviderFileDto.getFile()));
+                serviceProvider.setImage2(fileUploadService.getUploadedFileString(keyName+"/image2", serviceProviderFileDto.getFile()));
                 break;
             case "image3":
                 oldFilePath = serviceProvider.getImage3();
-                serviceProvider.setImage3(getUploadedFileString(keyName+"/image3", serviceProviderFileDto.getFile()));
+                serviceProvider.setImage3(fileUploadService.getUploadedFileString(keyName+"/image3", serviceProviderFileDto.getFile()));
                 break;
             case "idProof":
                 oldFilePath = serviceProvider.getIdProof();
-                serviceProvider.setIdProof(getUploadedFileString(keyName+"/idProof", serviceProviderFileDto.getFile()));
+                serviceProvider.setIdProof(fileUploadService.getUploadedFileString(keyName+"/idProof", serviceProviderFileDto.getFile()));
                 break;
             case "addressProof":
                 oldFilePath = serviceProvider.getAddressProof();
-                serviceProvider.setAddressProof(getUploadedFileString(keyName+"/addressProof", serviceProviderFileDto.getFile()));
+                serviceProvider.setAddressProof(fileUploadService.getUploadedFileString(keyName+"/addressProof", serviceProviderFileDto.getFile()));
                 break;
         }
         ServiceProvider updatedServiceProvider = serviceProviderRepository.save(serviceProvider);
         //Code to delete old files from s3
         if (oldFilePath != null) fileUploadService.deleteFile(oldFilePath);
         return serviceProviderMapper.mapToDto(updatedServiceProvider);
-    }
-
-    public String getUploadedFileString(String keyName, MultipartFile file) {
-        try {
-            if (file != null) {
-                return fileUploadService.uploadFile(keyName, file);
-            }
-        } catch (Exception e) {
-            log.info(e.getMessage());
-        }
-        return null;
     }
 
     public void deleteServiceProvider(Long id) {
@@ -154,7 +142,7 @@ public class ServiceProviderService {
                 .collect(Collectors.toList());
         // CookingSpecialities field is applicable only for Cooking service subtype.So for all other subtypes we will
         // store empty arraylist in it.
-        if(serviceSubtype.getSubtype() != "Cooking"){
+        if(!serviceSubtype.getSubtype().equals("Cooking")){
             providersEnrolledServiceRequestDto.setCookingSpecialities(new ArrayList<>());
         }
         ProvidersEnrolledService providersEnrolledService = providerEnrolledServiceMapper.mapToModel(providersEnrolledServiceRequestDto,

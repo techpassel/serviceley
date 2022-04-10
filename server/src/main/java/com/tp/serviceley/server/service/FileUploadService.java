@@ -111,4 +111,15 @@ public class FileUploadService {
             throw new BackendException("Error in deleting folder - " + folderPrefix);
         }
     }
+
+    public String getUploadedFileString(String keyName, MultipartFile file) {
+        try {
+            if (file != null) {
+                return uploadFile(keyName, file);
+            }
+        } catch (Exception e) {
+            log.info(String.valueOf(e.getStackTrace()));
+        }
+        return null;
+    }
 }

@@ -3,9 +3,7 @@ package com.tp.serviceley.server.controller.admin;
 import com.tp.serviceley.server.dto.StaffRequestDto;
 import com.tp.serviceley.server.exception.BackendException;
 import com.tp.serviceley.server.service.admin.StaffService;
-import com.tp.serviceley.server.service.user.OrderService;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +20,8 @@ public class StaffController {
     public ResponseEntity<?> createStaff(@RequestBody StaffRequestDto staffRequestDto){
         try {
             return new ResponseEntity<>(staffService.createStaff(staffRequestDto), HttpStatus.CREATED);
-        } catch (DataIntegrityViolationException e){
-            return new ResponseEntity<>("Service type already exist.", HttpStatus.BAD_REQUEST);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }

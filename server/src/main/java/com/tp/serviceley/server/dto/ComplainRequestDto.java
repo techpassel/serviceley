@@ -25,6 +25,7 @@ public class ComplainRequestDto {
     private Long finalRemarkByStaffId;
     private Integer customerSatisfactionRating;
     private String customerReview;
-    private List<ComplainMessageRequestDto> messages;
+    private ComplainMessageRequestDto firstMessage;
+    // We will send
     // We will create a separate API to set nextResponseDeadline. So we are not including that here.
 }
