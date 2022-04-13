@@ -1,0 +1,21 @@
+/*
+ * To customized Bootstrap Follow these steps
+ */
+
+/*
+ * Details of all customizable properties :-
+ * https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
+ */
+
+ $theme-colors: (
+    "primary": #0300b3,
+    "success": #20a50a,
+    "danger": #ff002f,
+    "logo": #ff1966,
+    "white": #ffffff,
+    "yellow": #fcca03
+);
+
+$btn-border-radius: 7px;
+
+@import "~bootstrap/scss/bootstrap";

@@ -1,0 +1,58 @@
+.navbar {
+    padding-top: 0.2rem !important;
+    padding-bottom: 0.2rem !important;
+}
+
+#navbar-btn {
+    border-width: 3px;
+    font-weight: bolder;
+}
+
+.navbar-brand {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}
+
+.icon {
+    font-size: 22px;
+}
+
+.right-icon {
+    padding-right: 30px;
+}
+
+.search-icon {
+    font-size: 20px;
+}
+
+.input-group-text {
+    padding: 0rem 0.75rem;
+    background: none;
+}
+
+.navbar-nav {
+    align-items: center;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 992px) {
+    .top {
+        padding-top: 10px;
+    }
+}
+
+.icon-count {
+    font-size: 0.7rem;
+    position: absolute;
+    top: -1px;
+    right: -5px;
+    width: 15px;
+    height: 15px;
+    color: #0300b3;
+    font-weight: 700;
+    background-color: white;
+    border-radius: 50%;
+}

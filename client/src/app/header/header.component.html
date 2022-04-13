@@ -1,0 +1,41 @@
+<nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand mx-3" href="#">
+            <img src="../../assets/images/serviceley_logo_name.png" width="180px">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 me-3">
+                <div class="input-group input ms-4 top">
+                    <input type="text" class="form-control" placeholder="Search">
+                    <span class="input-group-text cursor" id="basic-addon2">
+                        <fa-icon [icon]="faMagnifyingGlass" class="text-white search-icon"></fa-icon>
+                    </span>
+                </div>
+                <li class="nav-item ms-4 top">
+                    <a href="#" class="position-relative d-inline-flex">
+                        <fa-icon [icon]="faBell" class="text-logo icon"></fa-icon>
+                        <span class="icon-count d-flex align-items-center justify-content-center">
+                            0
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item ms-4 top">
+                    <a href="#" class="position-relative d-inline-flex">
+                        <fa-icon [icon]="faCartShopping" class="text-logo icon"></fa-icon>
+                        <span class="icon-count d-flex align-items-center justify-content-center">
+                            0
+                        </span>
+                    </a>
+                </li>
+                <li class="nav-item ms-4 top">
+                    <button class="btn btn-outline-logo" id="navbar-btn" type="submit">Login</button>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
