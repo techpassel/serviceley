@@ -1,3 +1,20 @@
+.flex-container {
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-around;
+    overflow: hidden;
+    align-items: flex-start;
+}
+
+.wrap {
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.flex-item {
+    padding: 20px;
+}
+
 .contact-link {
     text-decoration: none;
 }
@@ -21,4 +38,15 @@
 
 .top-padding {
     padding-top: 20px;
+}
+
+.footer-logo {
+    padding: 25px 20px;
+    background-color: #0300b3;
+    border-radius: 20px;
+}
+
+.query {
+    margin-top: 35px;
+    margin-bottom: 15px;
 }

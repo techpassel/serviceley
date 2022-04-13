@@ -1,5 +1,131 @@
-<app-header></app-header>
+<!-- <app-header></app-header>
 <div class="main-content">
   <router-outlet></router-outlet>
 </div>
-<app-footer></app-footer>
+<app-footer></app-footer> -->
+<div #sidebar class="sidebar">
+  <div class="logo_details">
+    <!-- <i class='bx bxl-c-plus-plus'></i> -->
+    <img src="../assets/images//serviceley_logo.png" width="45px" />
+    <img src="../assets/images/serviceley_name.png" width="150px" class="logo_name ms-2 mt-1" />
+    <i #toggleSidebarIcon class='bx bxs-chevron-left-circle text-black' (click)="toggleSidebar(toggleSidebarIcon)"></i>
+  </div>
+  <ul class="nav_links">
+    <li>
+      <a href="#">
+        <i class='bx bx-grid-alt'></i>
+        <span class="link_name">Dashboard</span>
+      </a>
+      <ul class="sub_menu blank">
+        <li><a class="link_name" href="#">Dashboard</a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="icon_link">
+        <a href="#">
+          <i class='bx bx-collection'></i>
+          <span class="link_name">Category</span>
+        </a>
+        <i class='bx bx-chevron-down' #firstArrow (click)="toggleShowMenu('first', firstArrow)"></i>
+      </div>
+      <ul #first class="sub_menu">
+        <li><a class="link_name" href="#">Category</a></li>
+        <li><a href="#">HTML & CSS</a></li>
+        <li><a href="#">Javascript</a></li>
+        <li><a href="#">PHP & MySQL</a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="icon_link">
+        <a href="#">
+          <i class='bx bx-book-alt'></i>
+          <span class="link_name">Posts</span>
+        </a>
+        <i class='bx bx-chevron-down' #secondArrow (click)="toggleShowMenu('second', secondArrow)"></i>
+      </div>
+      <ul #second class="sub_menu">
+        <li><a class="link_name" href="#">Posts</a></li>
+        <li><a href="#">Web design</a></li>
+        <li><a href="#">Login form</a></li>
+        <li><a href="#">Card design</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">
+        <i class='bx bx-pie-chart-alt-2'></i>
+        <span class="link_name">Analytics</span>
+      </a>
+      <ul class="sub_menu blank">
+        <li><a class="link_name" href="#">Analytics</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">
+        <i class='bx bx-line-chart'></i>
+        <span class="link_name">Chart</span>
+      </a>
+      <ul class="sub_menu blank">
+        <li><a class="link_name" href="#">Chart</a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="icon_link">
+        <a href="#">
+          <i class='bx bx-plug'></i>
+          <span class="link_name">Plugins</span>
+        </a>
+        <i class='bx bx-chevron-down' #thirdArrow (click)="toggleShowMenu('third', thirdArrow)"></i>
+      </div>
+      <ul #third class="sub_menu">
+        <li><a class="link_name" href="#">Plugins</a></li>
+        <li><a href="#">UI Face</a></li>
+        <li><a href="#">Pigments</a></li>
+        <li><a href="#">Box Icons</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">
+        <i class='bx bx-compass'></i>
+        <span class="link_name">Explore</span>
+      </a>
+      <ul class="sub_menu blank">
+        <li><a class="link_name" href="#">Explore</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">
+        <i class='bx bx-history'></i>
+        <span class="link_name">History</span>
+      </a>
+      <ul class="sub_menu blank">
+        <li><a class="link_name" href="#">History</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">
+        <i class='bx bx-cog'></i>
+        <span class="link_name">Setting</span>
+      </a>
+      <ul class="sub_menu blank">
+        <li><a class="link_name" href="#">Setting</a></li>
+      </ul>
+    </li>
+    <li>
+      <div class="profile_details">
+        <img src="../assets/images/profile.jpg" alt="Profile">
+        <div class="name_usertype">
+          <div class="name">Aman Saurabh</div>
+          <div class="usertype">Senior Developer</div>
+        </div>
+        <i class='bx bx-log-out'></i>
+      </div>
+    </li>
+  </ul>
+</div>
+<section class="home_section">
+  <app-header></app-header>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
+</section>
