@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-@RestController()
+@RestController
 @RequestMapping("/api/admin/cart-order")
 @AllArgsConstructor
 public class CartAndOrderController {
