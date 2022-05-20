@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { CommonService } from 'src/services/common/common.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -11,5 +11,5 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
+  
 }

@@ -1,7 +1,7 @@
-<app-sidebar (sidebarClosed)="sidebarClosed()"></app-sidebar>
-<section #homeSection class="home-section">
+<app-sidebar (sidebarClosed)="sidebarClosed()" *ngIf="!isAuthRoute"></app-sidebar>
+<section #homeSection class="home_section" [ngClass]="{'with_sidebar': !isAuthRoute}">
   <app-header></app-header>
-  <div class="main-content">
+  <div class="main_content">
     <router-outlet></router-outlet>
   </div>
   <app-footer></app-footer>

@@ -1,5 +1,6 @@
 <nav #navbar class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
+        <a class="navbar-brand ms-2" routerLink="" *ngIf="isAuthRoute"><img class="navbar-logo" src="../../assets/images/new_logo_name.png" width="200px" /></a>
         <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -29,7 +30,7 @@
                     </a>
                 </li>
                 <li class="nav-item ms-4 top">
-                    <button class="btn btn-outline-logo" id="navbar-btn" type="submit">Login</button>
+                    <button class="btn btn-outline-logo" id="navbar-btn" type="button" (click)="moveToLoginPage()">Login</button>
                 </li>
             </ul>
 

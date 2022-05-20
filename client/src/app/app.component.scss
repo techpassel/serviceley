@@ -1,17 +1,20 @@
-.main-content {
+.main_content {
     min-height: calc(100vh - 9.5vh);
 }
 
-.home-section {
+.home_section {
     position: relative;
-    left: 250px;
     height: 100%;
-    width: calc(100% - 250px);
     transition: all 0.6s ease;
     z-index: 10;
 }
 
-.home-section.dilate {
+.with_sidebar {
+    left: 250px;
+    width: calc(100% - 250px);
+}
+
+.with_sidebar.dilate {
     left: 83px;
     width: calc(100% - 83px);
 }
