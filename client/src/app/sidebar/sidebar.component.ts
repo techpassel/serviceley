@@ -15,13 +15,19 @@ export class SidebarComponent implements OnInit {
   @Output() sidebarClosed: EventEmitter<string> = new EventEmitter();
 
   @ViewChild('first', { static: false })
-  firstDropdown!: ElementRef;
+  firstDropdown! : ElementRef;
   @ViewChild('second', { static: false })
-  secondDropdown!: ElementRef;
+  secondDropdown! : ElementRef;
   @ViewChild('third', { static: false })
-  thirdDropdown!: ElementRef;
+  thirdDropdown! : ElementRef;
+  @ViewChild('firstArrow', { static: false })
+  firstArrow! : ElementRef;
+  @ViewChild('secondArrow', { static: false })
+  secondArrow! : ElementRef;
+  @ViewChild('thirdArrow', { static: false })
+  thirdArrow! : ElementRef;
   @ViewChild('sidebar', { static: false })
-  sidebarElement!: ElementRef;
+  sidebarElement! : ElementRef;
 
   toggleShowMenu = (val: string, currentElement: HTMLElement) => {
     let component = null;
@@ -49,5 +55,21 @@ export class SidebarComponent implements OnInit {
     this.sidebarElement.nativeElement.classList.toggle('close');
     elem.classList.toggle('transform_arrow');
     this.sidebarClosed.emit();
+    this.closeAllSubMenu();
+  }
+
+  closeAllSubMenu = () => {
+    if(this.firstDropdown.nativeElement.classList.contains('show_menu')){
+      this.firstDropdown.nativeElement.classList.remove('show_menu');
+      this.firstArrow.nativeElement.classList.toggle('transform_arrow')
+    }
+    if(this.secondDropdown.nativeElement.classList.contains('show_menu')){
+      this.secondDropdown.nativeElement.classList.remove('show_menu');
+      this.secondArrow.nativeElement.classList.toggle('transform_arrow')
+    }
+    if(this.thirdDropdown.nativeElement.classList.contains('show_menu')){
+      this.thirdDropdown.nativeElement.classList.remove('show_menu');
+      this.thirdArrow.nativeElement.classList.toggle('transform_arrow')
+    }
   }
 }

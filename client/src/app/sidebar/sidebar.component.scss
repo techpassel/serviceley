@@ -115,6 +115,7 @@
 
 .sidebar .nav_links li .show_menu {
     display: block !important;
+    transition: all 0.6s ease;
 }
 
 .sidebar .nav_links li .sub_menu a {
@@ -128,6 +129,7 @@
 
 .sidebar .nav_links li .sub_menu a:hover {
     opacity: 1;
+    font-weight: 500;
 }
 
 .sidebar.close .nav_links li .sub_menu {
