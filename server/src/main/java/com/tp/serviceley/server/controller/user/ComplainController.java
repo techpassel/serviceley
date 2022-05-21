@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/user/complain")
 public class ComplainController {
     private final ComplainService complainService;
-
     @RequestMapping(method = RequestMethod.POST, value = "")
     public ResponseEntity<?> createComplain(@RequestBody ComplainRequestDto complainRequestDto){
         try {
