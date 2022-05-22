@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faBell, faCartShopping, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { CommonService } from 'src/services/common/common.service';
+import { AuthObservableService } from 'src/services/observables-related/auth-observable.service';
 
 @Component({
   selector: 'app-header',
@@ -14,10 +14,10 @@ export class HeaderComponent implements OnInit {
   faMagnifyingGlass = faMagnifyingGlass;
   isAuthRoute: boolean = false;
 
-  constructor(private router: Router, private commonService: CommonService) { }
+  constructor(private router: Router, private authObservableService: AuthObservableService) { }
 
   ngOnInit(): void {
-    this.commonService.authRouteEventListner().subscribe(info => {
+    this.authObservableService.authRouteEventListner().subscribe(info => {
       this.isAuthRoute = info;
     })
   }

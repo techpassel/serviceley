@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoginRequestData } from 'src/models/login-request-data';
+import { AuthService } from 'src/services/auth/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -11,7 +13,7 @@ export class LoginComponent implements OnInit {
   isProcessing: boolean = false;
   loginResponseType: string | null = null;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.initializeLoginForm();
@@ -53,6 +55,8 @@ export class LoginComponent implements OnInit {
   get f() { return this.signinForm.controls; }
 
   onSubmit() {
+    console.log("Calledddd");
+    
     this.submitted = true;
 
     // return from here if form is invalid
@@ -61,23 +65,25 @@ export class LoginComponent implements OnInit {
     }
 
     this.isProcessing = true;
-    const user = {
-      username: this.signinForm.value.username,
-      password: this.signinForm.value.password
-    };
-    this.signin$(user);
+    let loginRequestData = new LoginRequestData();
+    loginRequestData.email = this.signinForm.value.username;
+    loginRequestData.password = this.signinForm.value.password;
+    this.signin$(loginRequestData);
   }
 
-  signin$(user: any): void {
-    // this.authenticationService.signin(user).subscribe(
-    //   (response: any) => {
-    //     //We have to write logic here
-    //     this.isProcessing = false;
-    //   },
-    //   (error: any) => {
-    //     this.isProcessing = false;
-    //   }
-    // );
+  signin$(loginRequestData: LoginRequestData): void {
+    this.authService.login(loginRequestData).subscribe(
+      (response: any) => {
+        console.log(response, "response");
+        //We have to write logic here
+        this.isProcessing = false;
+      },
+      (error: any) => {
+        console.log(error, "error");
+
+        this.isProcessing = false;
+      }
+    );
   }
 
   onKeyUp(type: any) {

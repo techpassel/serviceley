@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { CommonService } from 'src/services/common/common.service';
+import { AuthObservableService } from 'src/services/observables-related/auth-observable.service';
 
 @Component({
   selector: 'app-auth',
@@ -8,10 +8,10 @@ import { CommonService } from 'src/services/common/common.service';
 })
 export class AuthComponent implements OnInit {
 
-  constructor(private commonService: CommonService) { }
+  constructor(private authObservableService: AuthObservableService) { }
 
   ngOnInit(): void {
-    this.commonService.emitAuthRouteEvent(true);
+    this.authObservableService.emitAuthRouteEvent(true);
   }
 
 }

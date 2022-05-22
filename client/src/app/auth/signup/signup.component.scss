@@ -1,0 +1,11 @@
+.name_inputs {
+    display: flex;
+    gap: 10px;
+}
+
+@media only screen and (max-width: 1024px) {
+    .name_inputs {
+        flex-direction: column;
+        gap: 30px;
+    }
+}

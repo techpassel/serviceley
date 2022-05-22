@@ -1,6 +1,6 @@
-<div class="router_content">
-    <div class="title">Sign In</div>
-    <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="formFields">
+<div class="auth_content">
+    <div class="title">Login</div>
+    <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="form">
         <div>
             <input type="text" (keyup)="onKeyUp('username')" (change)="setEmailPhoneValidator()" class="form_input"
                 placeholder="Email or mobile number" formControlName="username">
@@ -23,6 +23,6 @@
         </div>
         <button class="button" type="submit">{{!isProcessing?'Submit':'Processing...'}}</button>
     </form>
-    <div><a class="link" routerLink="/auth">Forget Password?</a></div>
+    <div><a class="link" routerLink="/auth/forget-password">Forget Password?</a></div>
     <div>Haven't joined yet? <a class="link" routerLink="/auth">Join now.</a></div>
 </div>
