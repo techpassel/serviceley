@@ -45,18 +45,22 @@ public class AuthService {
     @Transactional
     public void signup(SignupRequestDto signupRequestDto){
         String email = signupRequestDto.getEmail();
-        Optional<User> emailUser = userRepository.findByEmail(email);
-        if(emailUser.isPresent()){
+        String phone = signupRequestDto.getPhone();
+        if(userRepository.findByEmail(email).isPresent()){
             throw new BackendException("Email already exist");
+        }
+        if(userRepository.findByPhone(phone).isPresent()){
+            throw new BackendException("Phone already exist");
         }
         User user = new User();
         user.setFirstName(signupRequestDto.getFirstName());
         user.setLastName(signupRequestDto.getLastName());
         user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
         user.setEmail(email);
+        user.setPhone(phone);
         user.setUserType(signupRequestDto.getUserType());
         userRepository.save(user);
-        sendAccountActivationEmail(user);
+        //sendAccountActivationEmail(user);
     }
 
     public String resendActivationEmail(String email){
