@@ -1,4 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+.toast-error {
+    background-color: #fc1456 !important;
+}
+
+.toast-success {
+    background-color: #20a50a !important;
+}
+
+.toast-warning {
+    background-color: #ff8901 !important;
+}
+
+.toast-info {
+    background-color: #020091 !important;
+}
+
 @import "./styles-bootstrap.scss";
 @import "./styles-common.scss";
 @import url('https://fonts.googleapis.com/css?family=Muli:300,400,600&display=swap');

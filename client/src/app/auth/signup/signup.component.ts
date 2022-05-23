@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SignupRequestData } from 'src/models/signup-request-data';
 import { AuthService } from 'src/services/auth/auth.service';
 import { CommonService } from 'src/services/common/common.service';
+import { ToastrUtil } from 'src/utils/toastr.util';
 
 @Component({
   selector: 'app-signup',
@@ -16,8 +17,16 @@ export class SignupComponent implements OnInit {
   isProcessing: boolean = false;
   emailExists: boolean = false;
   phoneExists: boolean = false;
+  isUserRegistered: boolean = false;
+  customError: string | null = null;
+  user: SignupRequestData = new SignupRequestData();
 
-  constructor(private formBuilder: FormBuilder, private commonService: CommonService, private authService: AuthService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private commonService: CommonService,
+    private authService: AuthService,
+    private toastr: ToastrUtil
+  ) { }
 
   ngOnInit(): void {
     this.initializeSignupForm();
@@ -55,8 +64,6 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log("Submit called");
-    
     this.submitted = true;
 
     // return from here if form is invalid.
@@ -73,23 +80,36 @@ export class SignupComponent implements OnInit {
     }
 
     this.isProcessing = true;
-    let user = new SignupRequestData();
-    user.firstName = this.commonService.capitalizeFirstLetter(this.signupForm.value.firstName);
-    user.lastName = this.commonService.capitalizeFirstLetter(this.signupForm.value.lastName);
-    user.email = this.signupForm.value.email;
-    user.phone = this.signupForm.value.phone;
-    user.password = this.signupForm.value.password;
-    this.signup$(user);
+    this.user.firstName = this.commonService.capitalizeFirstLetter(this.signupForm.value.firstName);
+    this.user.lastName = this.commonService.capitalizeFirstLetter(this.signupForm.value.lastName);
+    this.user.email = this.signupForm.value.email;
+    this.user.phone = this.signupForm.value.phone;
+    this.user.password = this.signupForm.value.password;
+    this.signup$();
   }
 
-  signup$(user: SignupRequestData): void {
-    this.authService.signup(user).subscribe((response: any) => {
-      console.log(response, 'response');
+  signup$(): void {
+    this.authService.signup(this.user).subscribe((response: any) => {
+      this.toastr.showSuccess("Congratulations! You have registered successfully.");
+      this.isUserRegistered = true;
       this.isProcessing = false;
     },
       (error: any) => {
         this.isProcessing = false;
-        console.log(error, 'error');
+        if (error.status == 400) {
+          switch (error.error) {
+            case "Email already exist":
+              this.emailExists = true;
+              break;
+            case "Phone already exist":
+              this.phoneExists = true;
+              break;
+            default:
+              this.customError = error.error;
+              this.toastr.showError(error.error);
+              break;
+          }
+        }
       });
   }
 

@@ -1,54 +1,70 @@
-<div class="auth_content">
-    <div class="title">Signup</div>
-    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form">
-        <div class="name_inputs">
-            <div>
-                <input type="text" placeholder="First name" formControlName="firstName" class="form_input">
-                <div *ngIf="submitted && f.firstName.errors" class="error-text">
-                    <div *ngIf="f.firstName.errors.required">First Name is required</div>
+<div>
+    <div *ngIf="!isUserRegistered; else elseTemplate" class="auth_content">
+        <div class="title">Signup</div>
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form">
+            <div class="name_inputs">
+                <div>
+                    <input type="text" placeholder="First name" formControlName="firstName" class="form_input">
+                    <div *ngIf="submitted && f.firstName.errors" class="error-text">
+                        <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" placeholder="Last name" formControlName="lastName" class="form_input">
+                    <div *ngIf="submitted && f.lastName.errors" class="error-text">
+                        <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                    </div>
                 </div>
             </div>
             <div>
-                <input type="text" placeholder="Last name" formControlName="lastName" class="form_input">
-                <div *ngIf="submitted && f.lastName.errors" class="error-text">
-                    <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                <input type="text" (keyup)="onKeyUp('email')" placeholder="Email" formControlName="email"
+                    class="form_input">
+                <div *ngIf="submitted && f.email.errors" class="error-text">
+                    <div *ngIf="f.email.errors.required">Email is required</div>
+                    <div *ngIf="f.email.errors.email">Please enter a valid email address</div>
+                </div>
+                <div *ngIf="emailExists" class="error-text">This email is already registered.</div>
+            </div>
+            <div>
+                <input type="text" (keyup)="onKeyUp('phone')" placeholder="Mobile number" formControlName="phone"
+                    class="form_input">
+                <div *ngIf="submitted && f.phone.errors" class="error-text">
+                    <div *ngIf="f.phone.errors.required">Mobile number is required</div>
+                    <div *ngIf="f.phone.errors.minlength || f.phone.errors.maxlength">Mobile number must contain
+                        10 digits</div>
+                </div>
+                <div *ngIf="phoneExists" class="error-text">This number is already registered.</div>
+            </div>
+            <div>
+                <input type="password" placeholder="Password" formControlName="password" class="form_input">
+                <div *ngIf="submitted && f.password.errors" class="error-text">
+                    <div *ngIf="f.password.errors.required">Password is required</div>
+                    <div *ngIf="f.password.errors.minlength">Password must be atleast 6 characters long</div>
                 </div>
             </div>
-        </div>
-        <div>
-            <input type="text" (keyup)="onKeyUp('email')" placeholder="Email" formControlName="email" class="form_input">
-            <div *ngIf="submitted && f.email.errors" class="error-text">
-                <div *ngIf="f.email.errors.required">Email is required</div>
-                <div *ngIf="f.email.errors.email">Please enter a valid email address</div>
+            <div>
+                <input type="password" (keyup)="onKeyUp('confirmPassword')" placeholder="Confirm password"
+                    formControlName="confirmPassword" class="form_input">
+                <div *ngIf="submitted && f.confirmPassword.errors" class="error-text">
+                    <div *ngIf="f.confirmPassword.errors.required">Confirm Password is required</div>
+                    <div *ngIf="f.confirmPassword.errors.minlength">Confirm Password must be atleast 6 characters long
+                    </div>
+                </div>
+                <div *ngIf="isPasswordMismatched" class="error-text">Password and confirm password did not match.</div>
             </div>
-            <div *ngIf="emailExists" class="error-text">Email is already registered with some other user.</div>
+            <div *ngIf="customError != null || customError != ''" class="error-text">{{customError}}</div>
+            <button class="button" type="submit">{{!isProcessing?'Submit':'Processing...'}}</button>
+        </form>
+        <div>Already a member? <a class="link" routerLink="/auth/login">Login.</a></div>
+    </div>
+    <ng-template #elseTemplate>
+        <div class="auth_content">
+            <div class="title">Signup</div>
+            <p>Thanks for registering with us. A verification link has been sent to your registered email
+                "{{user.email}}".
+                Please verify your email to complete the registration process.</p>
+            <div><a class="link" routerLink="/auth/login">Click here</a> to move to login
+                page.</div>
         </div>
-        <div>
-            <input type="text" (keyup)="onKeyUp('phone')" placeholder="Mobile number" formControlName="phone" class="form_input">
-            <div *ngIf="submitted && f.phone.errors" class="error-text">
-                <div *ngIf="f.phone.errors.required">Mobile number is required</div>
-                <div *ngIf="f.phone.errors.minlength || f.phone.errors.maxlength">Mobile number must contain
-                    10 digits</div>
-            </div>
-            <div *ngIf="phoneExists" class="error-text">Email is already registered with some other user.</div>
-        </div>
-        <div>
-            <input type="text" placeholder="Password" formControlName="password" class="form_input">
-            <div *ngIf="submitted && f.password.errors" class="error-text">
-                <div *ngIf="f.password.errors.required">Password is required</div>
-                <div *ngIf="f.password.errors.minlength">Password must be atleast 6 characters long</div>
-            </div>
-        </div>
-        <div>
-            <input type="text" (keyup)="onKeyUp('confirmPassword')" placeholder="Confirm password"
-                formControlName="confirmPassword" class="form_input">
-            <div *ngIf="submitted && f.confirmPassword.errors" class="error-text">
-                <div *ngIf="f.confirmPassword.errors.required">Confirm Password is required</div>
-                <div *ngIf="f.confirmPassword.errors.minlength">Confirm Password must be atleast 6 characters long</div>
-            </div>
-            <div *ngIf="isPasswordMismatched" class="error-text">Password and confirm password did not match.</div>
-        </div>
-        <button class="button" type="submit">{{!isProcessing?'Submit':'Processing...'}}</button>
-    </form>
-    <div>Already a member? <a class="link" routerLink="/auth">Login.</a></div>
+    </ng-template>
 </div>
