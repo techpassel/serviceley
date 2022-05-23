@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,7 +26,7 @@ public class VerificationToken extends CreateUpdateRecord{
     String token;
     //We will use this field to store VerificationToken as well as OTP for phone verification.
 
-    @NotEmpty
+    @NotNull
     @Column(name = "token_type")
     TokenType tokenType;
 
@@ -39,4 +40,3 @@ public class VerificationToken extends CreateUpdateRecord{
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 }
-
