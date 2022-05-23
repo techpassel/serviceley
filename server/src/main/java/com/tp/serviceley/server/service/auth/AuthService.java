@@ -60,7 +60,7 @@ public class AuthService {
         user.setPhone(phone);
         user.setUserType(signupRequestDto.getUserType());
         userRepository.save(user);
-        //sendAccountActivationEmail(user);
+        sendAccountActivationEmail(user);
     }
 
     public String resendActivationEmail(String email){
