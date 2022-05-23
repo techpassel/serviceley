@@ -6,6 +6,7 @@ import com.tp.serviceley.server.dto.SignupRequestDto;
 import com.tp.serviceley.server.exception.BackendException;
 import com.tp.serviceley.server.model.User;
 import com.tp.serviceley.server.model.enums.UserType;
+import com.tp.serviceley.server.service.CommonService;
 import com.tp.serviceley.server.service.auth.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,19 +25,21 @@ import java.util.Map;
 public class AuthController {
     // Constructor based dependency injection
     private final AuthService authService;
+    private final CommonService commonService;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto){
         try {
-            if(signupRequestDto.getUserType() == null){
-                signupRequestDto.setUserType(UserType.User);
-            }
+            System.out.println(signupRequestDto);
             authService.signup(signupRequestDto);
-            return new ResponseEntity<>("User registered successfully.An activation email is sent " +
-                    "successfully on your registered email.Please verify your email.", HttpStatus.OK);
-        } catch (BackendException e){
+            return new ResponseEntity<>("User registered successfully. An activation email is sent " +
+                    "on your registered email. Please verify your email.", HttpStatus.OK);
+        } catch (BackendException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (ConstraintViolationException e){
+            return new ResponseEntity<>(commonService.buildConstraintViolations(e), HttpStatus.BAD_REQUEST);
         } catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

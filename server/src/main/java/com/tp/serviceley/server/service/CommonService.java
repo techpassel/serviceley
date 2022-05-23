@@ -11,10 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -53,5 +54,15 @@ public class CommonService {
         String[] tokenSplits = UUID.randomUUID().toString().toUpperCase().split("-");
         String token = tokenSplits.length >= 2 ? tokenSplits[0] + tokenSplits[1] : tokenSplits[0];
         return "SLEY-" + LocalDate.now() + "-" + token;
+    }
+
+    public String buildConstraintViolations(ConstraintViolationException e) {
+        return e.getConstraintViolations().stream().
+                map(v -> v.getConstraintDescriptor().getMessageTemplate())
+                .collect(Collectors.joining(", "));
+        //v.getMessage() also gives same result as v.getConstraintDescriptor().getMessageTemplate()
+        //So v.getMessage() can also bve used.
+        //Similarly [.reduce((f,s) -> f +", "+s).orElse(null);] can also be used in place of
+        //[.collect(Collectors.joining(", "))]. Both will produce same result;
     }
 }
