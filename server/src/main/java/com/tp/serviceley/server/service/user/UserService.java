@@ -115,7 +115,7 @@ public class UserService {
                 .build();
     }
 
-    public String sendMobileVerificationToken(Long userId, Long phone){
+    public String sendMobileVerificationToken(Long userId, String phone){
         User user = userRepository.findById(userId).orElseThrow(() -> new BackendException
                 ("User with given id not found."));
         if(user.getPhone() == null || user.getPhone() != phone){
@@ -143,7 +143,7 @@ public class UserService {
                 TokenType.PhoneVerificationOTP).orElseThrow(() -> new BackendException
                 ("User doesn't have requested any mobile verification token."));
         if(verificationToken.getToken().equals(otp.toString())){
-            Long phone = Long.valueOf(verificationToken.getUpdatingValue());
+            String phone = verificationToken.getUpdatingValue();
             user.setPhone(phone);
             user.setPhoneVerified(true);
             userRepository.save(user);

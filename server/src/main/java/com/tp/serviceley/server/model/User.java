@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -28,9 +29,13 @@ public class User extends CreateUpdateRecord{
     @NotBlank(message = "Last name is required")
     private String lastName;
 
+    @NotBlank(message = "Mobile number is required")
     @Column(unique = true)
-    @Size(max = 10, min = 10)
-    private Long phone;
+    @Size(min = 10, max = 10, message = "Phone number must be of 10 digits")
+    private String phone;
+
+    private LocalDate dob;
+    //dob -> date of birth
 
     @Email(message = "Email should be valid")
     @NotEmpty(message = "Email is required")
@@ -40,19 +45,18 @@ public class User extends CreateUpdateRecord{
     @NotEmpty(message = "Password is required")
     private String password;
 
-    @NotNull
     private Gender gender;
 
     @Column(name="is_active")
-    @Size(max = 1)
+    //@Size(max = 1)
     private boolean isActive = false;
 
     @Column(name="is_phone_verified")
-    @Size(max = 1)
+    //@Size(max = 1)
     private boolean isPhoneVerified = false;
 
     @Column(name="is_email_verified")
-    @Size(max = 1)
+    //@Size(max = 1)
     private boolean isEmailVerified = false;
 
     @Column(name= "usertype")

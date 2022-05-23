@@ -55,7 +55,6 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
         user.setEmail(email);
         user.setUserType(signupRequestDto.getUserType());
-        user.setGender(signupRequestDto.getGender());
         userRepository.save(user);
         sendAccountActivationEmail(user);
     }

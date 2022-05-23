@@ -1,7 +1,9 @@
 package com.tp.serviceley.server.service;
 
 import com.amazonaws.services.sns.AmazonSNSClient;
-import com.amazonaws.services.sns.model.*;
+import com.amazonaws.services.sns.model.MessageAttributeValue;
+import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sns.model.PublishResult;
 import com.tp.serviceley.server.exception.BackendException;
 import com.tp.serviceley.server.model.User;
 import com.tp.serviceley.server.model.VerificationToken;
@@ -19,31 +21,29 @@ import java.util.concurrent.ThreadLocalRandom;
 @Service
 @Slf4j
 public class SmsService {
+    private static final String AWS_SNS_SMS_TYPE = "AWS.SNS.SMS.SMSType";
+    private static final String AWS_SNS_SMS_TYPE_VALUE = "Transactional";
+    private static final String AWS_SNS_DATA_TYPE = "String";
     @Value("${snsTopicARN}")
     private String topicARN;
-
     @Autowired
     private AmazonSNSClient amazonSNSClient;
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
 
-    private static final String AWS_SNS_SMS_TYPE = "AWS.SNS.SMS.SMSType";
-    private static final String AWS_SNS_SMS_TYPE_VALUE = "Transactional";
-    private static final String AWS_SNS_DATA_TYPE = "String";
-
-    public void sendOtp(User user, TokenType tokenType, Long phone){
+    public void sendOtp(User user, TokenType tokenType, String phone) {
         Integer num = ThreadLocalRandom.current().nextInt(100001, 999999);
-        String sms = "OTP for verifying your phone number on serviceley is "+num+".";
+        String sms = "OTP for verifying your phone number on serviceley is " + num + ".";
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(num.toString());
         verificationToken.setTokenType(tokenType);
-        verificationToken.setUpdatingValue(phone.toString());
+        verificationToken.setUpdatingValue(phone);
         verificationToken.setUser(user);
         verificationTokenRepository.save(verificationToken);
         sendSms(phone, sms);
     }
 
-    public String sendSms(Long phone, String message){
+    public String sendSms(String phone, String message) {
         try {
             int requestTimeout = 3000;
             Map<String, MessageAttributeValue> smsAttributes =
@@ -54,7 +54,7 @@ public class SmsService {
 
             PublishResult request = amazonSNSClient.publish(new PublishRequest()
                     .withMessage(message)
-                    .withPhoneNumber("+91"+phone)
+                    .withPhoneNumber("+91" + phone)
                     .withMessageAttributes(smsAttributes)
                     .withSdkRequestTimeout(requestTimeout));
             System.out.println(request);
@@ -82,7 +82,7 @@ public class SmsService {
             return "Sms sent successfully!";
         } catch (Exception e) {
             log.error(String.valueOf(e.getStackTrace()));
-            throw new BackendException("Some error occurred in sending sms."+e.getMessage());
+            throw new BackendException("Some error occurred in sending sms." + e.getMessage());
         }
     }
 }

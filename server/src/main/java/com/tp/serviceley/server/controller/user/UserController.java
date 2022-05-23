@@ -57,7 +57,7 @@ public class UserController {
     public ResponseEntity<?> sendMobileVerificationToken(@RequestBody Map<String, Long> data){
         try{
             Long userId = data.get("userId");
-            Long phone = data.get("phone");
+            String phone = data.get("phone").toString();
             return new ResponseEntity<>(userService.sendMobileVerificationToken(userId, phone), HttpStatus.OK);
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
