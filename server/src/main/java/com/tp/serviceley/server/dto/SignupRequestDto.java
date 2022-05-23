@@ -25,7 +25,7 @@ public class SignupRequestDto {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.userType = userType != null ? UserType.valueOf(userType.toLowerCase()) : null;
+        this.userType = userType != null ? UserType.valueOf(userType.toLowerCase()) : UserType.User;
         this.phone = phone;
     }
 

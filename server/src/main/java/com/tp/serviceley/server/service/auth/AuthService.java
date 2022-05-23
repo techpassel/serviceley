@@ -9,6 +9,7 @@ import com.tp.serviceley.server.model.NotificationEmail;
 import com.tp.serviceley.server.model.enums.TokenType;
 import com.tp.serviceley.server.model.User;
 import com.tp.serviceley.server.model.VerificationToken;
+import com.tp.serviceley.server.model.enums.UserType;
 import com.tp.serviceley.server.repository.UserRepository;
 import com.tp.serviceley.server.repository.VerificationTokenRepository;
 import com.tp.serviceley.server.security.JwtProvider;
@@ -58,7 +59,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(signupRequestDto.getPassword()));
         user.setEmail(email);
         user.setPhone(phone);
-        user.setUserType(signupRequestDto.getUserType());
+        user.setUserType(signupRequestDto.getUserType() != null? signupRequestDto.getUserType(): UserType.User);
         userRepository.save(user);
         sendAccountActivationEmail(user);
     }
