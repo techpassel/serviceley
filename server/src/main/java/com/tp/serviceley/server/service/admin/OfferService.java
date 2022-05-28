@@ -10,6 +10,7 @@ import com.tp.serviceley.server.repository.*;
 import com.tp.serviceley.server.service.CommonService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -90,7 +91,7 @@ public class OfferService {
             code = specialDiscount.getCode();
         } else {
             createdByUser = commonService.getCurrentUser();
-            Supplier<String> supplier = () -> UUID.randomUUID().toString().replace("-", "");
+            Supplier<String> supplier = () -> RandomStringUtils.randomAlphanumeric(21);
             code = supplier.get();
         }
 

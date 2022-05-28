@@ -7,6 +7,7 @@ import com.tp.serviceley.server.model.enums.TokenType;
 import com.tp.serviceley.server.repository.UserRepository;
 import com.tp.serviceley.server.repository.VerificationTokenRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -52,8 +53,7 @@ public class CommonService {
     }
 
     public String generateDisplayOrderId() {
-        String[] tokenSplits = UUID.randomUUID().toString().toUpperCase().split("-");
-        String token = tokenSplits.length >= 2 ? tokenSplits[0] + tokenSplits[1] : tokenSplits[0];
+        String token = RandomStringUtils.randomAlphanumeric(8);
         return "SLEY-" + LocalDate.now() + "-" + token;
     }
 

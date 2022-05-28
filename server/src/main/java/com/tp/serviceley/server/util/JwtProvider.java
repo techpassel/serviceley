@@ -1,5 +1,6 @@
-package com.tp.serviceley.server.security;
+package com.tp.serviceley.server.util;
 import com.tp.serviceley.server.exception.BackendException;
+import com.tp.serviceley.server.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -13,7 +14,6 @@ import java.security.*;
 import java.security.cert.CertificateException;
 import java.time.Instant;
 import java.util.Date;
-import java.util.function.Function;
 
 @Component
 public class JwtProvider {
@@ -67,9 +67,10 @@ public class JwtProvider {
         }
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, User user) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
+                .claim("userId", user.getId())
                 .setIssuedAt(Date.from(Instant.now()))
                 .signWith(getPrivateKey())
                 .setExpiration(Date.from(Instant.now().plusMillis(jwtExpirationInMillis)))
@@ -95,32 +96,24 @@ public class JwtProvider {
     //To validate token
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+        final Long userId = extractUserId(token);
+        //We are not using it for now, but later we may use it.
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-    }
-
-    //Common function to retrieve any particular data from token
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
-        final Claims claims = getAllClaimsFromToken(token);
-        return claimsResolver.apply(claims);
-    }
-
-    //Function to retrieve all information from token
-    private Claims getAllClaimsFromToken(String token) {
-        try{
-            return Jwts.parser().setSigningKey(getPublickey()).parseClaimsJws(token).getBody();
-            //Handle exceptions as per your requirement.
-        } catch (ExpiredJwtException e) {
-            System.out.println("Token expired ");
-        } catch(Exception e){
-            System.out.println("Some other exception in JWT parsing ");
-        }
-        return null;
     }
 
     //To extract the username from token
     public String extractUsername(String token){
         try{
-            return extractClaim(token, Claims::getSubject);
+            return getAllClaimsFromToken(token).getSubject();
+        } catch(NullPointerException e) {
+            return null;
+        }
+    }
+
+    //To extract the username from token
+    public Long extractUserId(String token){
+        try{
+            return (Long) getAllClaimsFromToken(token).get("userId");
         } catch(NullPointerException e) {
             return null;
         }
@@ -128,16 +121,20 @@ public class JwtProvider {
 
     //Check if the token has expired
     private Boolean isTokenExpired(String token) {
-        final Date expiration = extractExpiration(token);
+        final Date expiration = getAllClaimsFromToken(token).getExpiration();
         return expiration.before(new Date());
     }
 
-    //To extract the expiration time of token
-    private Date extractExpiration(String token) {
+    //Function to retrieve all information from token
+    private Claims getAllClaimsFromToken(String token) {
         try{
-            return extractClaim(token, Claims::getExpiration);
-        } catch(NullPointerException e) {
-            return null;
+            return Jwts.parserBuilder().setSigningKey(getPublickey()).build().parseClaimsJws(token).getBody();
+            //Handle exceptions as per your requirement.
+        } catch (ExpiredJwtException e) {
+            System.out.println("Token expired ");
+        } catch(Exception e){
+            System.out.println("Some other exception in JWT parsing ");
         }
+        return null;
     }
 }

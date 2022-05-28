@@ -1,6 +1,6 @@
 package com.tp.serviceley.server.config;
 
-import com.tp.serviceley.server.security.JwtRequestFilter;
+import com.tp.serviceley.server.util.JwtRequestFilter;
 import com.tp.serviceley.server.service.auth.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;

@@ -1,6 +1,9 @@
-package com.tp.serviceley.server.security;
+package com.tp.serviceley.server.util;
+import com.tp.serviceley.server.model.redis.RedisSession;
 import com.tp.serviceley.server.service.auth.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,11 +17,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@AllArgsConstructor
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
-    private final JwtProvider jwtProvider;
-    private final UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private JwtProvider jwtProvider;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Value("${app.security.jwt.expiration.time}")
+    private Long jwtExpirationInMillis;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -26,10 +35,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String jwt = null;
         String username = null;
+        RedisSession session = null;
 
         if(authHeader != null && authHeader.startsWith("Bearer ")){
-            jwt = authHeader.substring(7);
-            username = jwtProvider.extractUsername(jwt);
+            String sessionKey = authHeader.substring(7);
+            if(redisUtil.hasKey(sessionKey) && redisUtil.expire(sessionKey, jwtExpirationInMillis)){
+                session = redisUtil.get(sessionKey);
+                jwt = session.getToken();
+            }
+            Long userId = jwtProvider.extractUserId(jwt);
+            String email = jwtProvider.extractUsername(jwt);
+            if(userId == session.getUserId() && email == session.getEmail()) username = email;
         }
 
         if(username !=null){

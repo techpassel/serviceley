@@ -10,14 +10,19 @@ import com.tp.serviceley.server.model.User;
 import com.tp.serviceley.server.model.VerificationToken;
 import com.tp.serviceley.server.model.enums.TokenType;
 import com.tp.serviceley.server.model.enums.UserType;
+import com.tp.serviceley.server.model.redis.RedisSession;
 import com.tp.serviceley.server.repository.UserRepository;
 import com.tp.serviceley.server.repository.VerificationTokenRepository;
-import com.tp.serviceley.server.security.JwtProvider;
+import com.tp.serviceley.server.util.JwtProvider;
 import com.tp.serviceley.server.service.CommonService;
 import com.tp.serviceley.server.service.MailContentBuilder;
 import com.tp.serviceley.server.service.MailService;
 import com.tp.serviceley.server.service.user.CartService;
+import com.tp.serviceley.server.util.RedisUtil;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -32,18 +37,32 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
 public class AuthService {
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
-    private final VerificationTokenRepository verificationTokenRepository;
-    private final MailContentBuilder mailContentBuilder;
-    private final MailService mailService;
-    private final JwtProvider jwtProvider;
-    private final UserDetailsService userDetailsService;
-    private final AuthenticationManager authenticationManager;
-    private final CommonService commonService;
-    private final CartService cartService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private VerificationTokenRepository verificationTokenRepository;
+    @Autowired
+    private MailContentBuilder mailContentBuilder;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private JwtProvider jwtProvider;
+    @Autowired
+    private UserDetailsService userDetailsService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private CommonService commonService;
+    @Autowired
+    private CartService cartService;
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Value("${app.security.jwt.expiration.time}")
+    private Long jwtExpirationInMillis;
 
     @Transactional
     public String signup(SignupRequestDto signupRequestDto) {
@@ -152,10 +171,12 @@ public class AuthService {
             throw new BackendException("InvalidPasswordException");
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-        final String jwt = jwtProvider.generateToken(userDetails);
-
+        final String jwt = jwtProvider.generateToken(userDetails, user);
+        String sessionKey = RandomStringUtils.randomAlphanumeric(24);
+        RedisSession session = new RedisSession(user.getId(), user.getEmail(), jwt);
+        redisUtil.set(sessionKey, session, jwtExpirationInMillis);
         return new LoginResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(),
-                user.getUserType().getType(), jwt);
+                user.getUserType().getType(), sessionKey);
     }
 
     public String createForgetPassword(String email) {
