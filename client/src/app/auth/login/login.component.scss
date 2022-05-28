@@ -1,2 +1,13 @@
+.cursor {
+    cursor: pointer;
+}
 
+.else_text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 
+.back_button {
+    width: 100%;
+}

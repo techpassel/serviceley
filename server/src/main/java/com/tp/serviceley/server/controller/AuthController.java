@@ -30,10 +30,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody SignupRequestDto signupRequestDto){
         try {
-            System.out.println(signupRequestDto);
-            authService.signup(signupRequestDto);
-            return new ResponseEntity<>("User registered successfully. An activation email is sent " +
-                    "on your registered email. Please verify your email.", HttpStatus.OK);
+            return new ResponseEntity<>(authService.signup(signupRequestDto), HttpStatus.OK);
         } catch (BackendException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (ConstraintViolationException e){
@@ -60,22 +57,20 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(authService.login(loginRequestDto));
-        } catch (BadCredentialsException e) {
-            return new ResponseEntity<>("Incorrect email or password.", HttpStatus.UNAUTHORIZED);
         } catch (BackendException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         } catch (DisabledException e){
-            return new ResponseEntity<>("User is disabled now.Please check if email is verified.", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         } catch (Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("/resend-activation-email")
-    public ResponseEntity<?> resendActivationEmail(@RequestBody HashMap<String, String> data) {
+    public ResponseEntity<?> resendActivationEmail(@RequestBody String username) {
         try {
-            String email = data.get("email");
-            return new ResponseEntity<>(authService.resendActivationEmail(email), HttpStatus.OK);
+            return new ResponseEntity<>(authService.resendActivationEmail(username), HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }

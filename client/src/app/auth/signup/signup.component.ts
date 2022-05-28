@@ -68,13 +68,11 @@ export class SignupComponent implements OnInit {
 
     // return from here if form is invalid.
     if (this.signupForm.invalid) {
-      console.log("Invalid");
       return;
     }
 
     // return from here if password and confirm password don't match.
     if (this.signupForm.value.password !== this.signupForm.value.confirmPassword) {
-      console.log("pwd mismatch");
       this.isPasswordMismatched = true;
       return;
     }

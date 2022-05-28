@@ -52,7 +52,7 @@
                 </div>
                 <div *ngIf="isPasswordMismatched" class="error-text">Password and confirm password did not match.</div>
             </div>
-            <div *ngIf="customError != null || customError != ''" class="error-text">{{customError}}</div>
+            <div *ngIf="customError != null && customError != ''" class="error-text">{{customError}}</div>
             <button class="button" type="submit">{{!isProcessing?'Submit':'Processing...'}}</button>
         </form>
         <div>Already a member? <a class="link" routerLink="/auth/login">Login.</a></div>

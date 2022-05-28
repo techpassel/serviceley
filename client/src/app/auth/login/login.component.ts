@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 import { LoginRequestData } from 'src/models/login-request-data';
+import { UserData } from 'src/models/user-data';
 import { AuthService } from 'src/services/auth/auth.service';
+import { ToastrUtil } from 'src/utils/toastr.util';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -9,11 +12,23 @@ import { AuthService } from 'src/services/auth/auth.service';
 })
 export class LoginComponent implements OnInit {
   signinForm!: FormGroup;
+  loginRequestData = new LoginRequestData();
   submitted: boolean = false;
   isProcessing: boolean = false;
   loginResponseType: string | null = null;
+  customError: string | null = null;
+  invalidPhone: boolean = false;
+  invalidEmail: boolean = false;
+  invalidPassword: boolean = false;
+  emailVerificationNeeded: boolean = false;
+  emailVerificationResendSuccess: boolean = false;
+  appName = environment.appName;
+  userInfo = new UserData();
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private toastr: ToastrUtil) { }
 
   ngOnInit(): void {
     this.initializeLoginForm();
@@ -55,8 +70,7 @@ export class LoginComponent implements OnInit {
   get f() { return this.signinForm.controls; }
 
   onSubmit() {
-    console.log("Calledddd");
-    
+
     this.submitted = true;
 
     // return from here if form is invalid
@@ -65,32 +79,87 @@ export class LoginComponent implements OnInit {
     }
 
     this.isProcessing = true;
-    let loginRequestData = new LoginRequestData();
-    loginRequestData.email = this.signinForm.value.username;
-    loginRequestData.password = this.signinForm.value.password;
-    this.signin$(loginRequestData);
+    this.loginRequestData.username = this.signinForm.value.username;
+    this.loginRequestData.password = this.signinForm.value.password;
+    this.signin$();
   }
 
-  signin$(loginRequestData: LoginRequestData): void {
-    this.authService.login(loginRequestData).subscribe(
+  signin$(): void {
+    this.authService.login(this.loginRequestData).subscribe(
       (response: any) => {
-        console.log(response, "response");
+        console.log(response);
+        
+        this.toastr.showSuccess("Logged in successfully.");
         //We have to write logic here
         this.isProcessing = false;
       },
       (error: any) => {
-        console.log(error, "error");
-
+        if (error.status == 406) {
+          switch (error.error) {
+            case "InvalidPhoneException":
+              this.invalidPhone = true;
+              this.toastr.showError("Provided mobile number is not registered with us. Please check your number")
+              break;
+            case "InvalidEmailException":
+              this.invalidEmail = true;
+              this.toastr.showError("Provided email is not registered with us. Please check your email.")
+              break;
+            case "InvalidPasswordException":
+              this.invalidPassword = true;
+              this.toastr.showError("Password is incorrect. Please check your email and password.")
+              break;
+            case "EmailNotVerifiedException":
+              this.emailVerificationNeeded = true;
+              break;
+            default:
+              break;
+          }
+        } else if (error.status == 401 && error.error == "InactiveUserException") {
+          this.customError = "Your account is deactivated now. Please contact support team.";
+          this.toastr.showError("Your account is deactivated now. Please contact support team.")
+        } else {
+          this.toastr.showError(error.error);
+        }
         this.isProcessing = false;
       }
     );
   }
 
   onKeyUp(type: any) {
-    if ((type === 'username' && this.loginResponseType === 'invalidUser') ||
-      (type === 'pass' && this.loginResponseType === 'incorrectPassword')) {
-      this.loginResponseType = null;
+    if (type === 'username'){
+      this.invalidEmail = false;
+      this.invalidPhone = false;
     }
+    if (type === 'pass') {
+      this.invalidPassword = false;
+    }
+  }
+
+  resendVerificationLink() {
+    this.authService.resendActivationEmail(this.loginRequestData.username).subscribe(
+      (response: any) => {
+        this.emailVerificationResendSuccess = true;
+        this.toastr.showSuccess(response);
+      },
+      (error: any) => {
+        this.toastr.showError(error.error);
+      }
+    )
+
+  }
+
+  resetLogin() {
+    this.initializeLoginForm();
+    this.loginRequestData = new LoginRequestData();
+    this.submitted = false;
+    this.isProcessing = false;
+    this.loginResponseType = null;
+    this.customError = null;
+    this.invalidPhone = false;
+    this.invalidEmail = false;
+    this.invalidPassword = false;
+    this.emailVerificationNeeded = false;
+    this.emailVerificationResendSuccess = false;
   }
 
 }

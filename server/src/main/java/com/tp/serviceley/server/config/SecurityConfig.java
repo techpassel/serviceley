@@ -30,15 +30,15 @@ import java.util.List;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final JwtRequestFilter jwtRequestFilter;
 
     /*
-     In Spring security CORS must be processed before Spring Security because the pre-flight request will not
-     contain any cookies (i.e. the JSESSIONID). And If the request does not contain any cookies and Spring Security
-     is first, the request will determine the user is not authenticated (since there are no cookies in the request)
-     and reject it. The easiest way to ensure that CORS is handled first is to use the Cors Filter. Users can
-     integrate the CorsFilter with Spring Security by providing a CorsConfigurationSource as follows.
+    In Spring security CORS must be processed before Spring Security because the pre-flight request will not
+    contain any cookies (i.e. the JSESSIONID). And If the request does not contain any cookies and Spring Security
+    is first, the request will determine the user is not authenticated (since there are no cookies in the request)
+    and reject it. The easiest way to ensure that CORS is handled first is to use the Cors Filter. Users can
+    integrate the CorsFilter with Spring Security by providing a CorsConfigurationSource as follows.
     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
@@ -61,28 +61,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/admin/**").hasAnyAuthority("admin")
                 .anyRequest().authenticated() //Validate all other requests
                 .and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS); //Here we are asking spring security not to manage session.
-        //Since we have asked spring security not to manage state.So now we need something which will validate each request and sets up security context.
-        //So following code is doing the same.
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //Here we are asking spring security not to manage session. Since we have asked spring security not to manage state.
+        //So now we need something which will validate each request and sets up security context. So following code is doing the same.
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     /*
-    Here we are not passing AuthenticationManagerBuilder object as argument to this method.
-    Actually here we are basically injecting AuthenticationManagerBuilder object using method injection
-    Which is also one of the type of dependency injection.
+    The UserDetailsService interface is used to retrieve user-related data. It has one method named loadUserByUsername()
+    which can be overridden to customize the process of finding the user. It is used by the DaoAuthenticationProvider to
+    load details about the user during authentication. If we create a customized UserDetailsService implementation we
+    have to tell the spring security about that. We can achieve that by configuring AuthenticationManagerBuilder as follows.
+    Note that in "auth.userDetailsService(userDetailsServiceImpl)", 'auth' represents an instance(i.e. object) of
+    AuthenticationManagerBuilder class, userDetailsService() represents an instance method of the AuthenticationManagerBuilder.
+    And 'userDetailsServiceImpl' represents an instance(i.e. object) of customized UserDetailsService class(we named the
+    class as - UserDetailsServiceImpl and is presents in "com.tp.serviceley.server.service.auth" package.)
     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
+        auth.userDetailsService(userDetailsServiceImpl);
     }
 
+    /*
+    Note that here we are using authenticationManagerBean() method and not authenticationManager() method. Actually
+    authenticationManager() method is used to do some configuration to the AuthenticationManager while
+    authenticationManagerBean() method is used to expose the AuthenticationManager as a Spring Bean that can be
+    Autowired and used. Like we have used object of AuthenticationManager in AuthService login() function to
+    authenticate used details.
+    */
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception{
         return super.authenticationManagerBean();
     }
 
+    /*
+    Here we are creating a Spring bean of PasswordEncoder that can be autowired and used anywhere in the application.
+    Like we have used it in AuthService signup() and resetPassword() method to encode the password.
+    */
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

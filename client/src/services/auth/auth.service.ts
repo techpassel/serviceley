@@ -13,6 +13,17 @@ const headers = new HttpHeaders(
     'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
   }
 );
+const textHeaders = new HttpHeaders(
+  {
+    'Content-Type': 'text/html',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, PUT, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
+  }
+);
+
+const textBodyHeaders = headers.set('Content-Type', 'text/html');
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +45,9 @@ export class AuthService {
 
   signup(signupRequestData: SignupRequestData): any {
     return this.http.post(this.baseApiUrl + '/auth/signup', signupRequestData, { headers, responseType: 'text' });
+  }
+
+  resendActivationEmail(username: string): any {
+    return this.http.post(this.baseApiUrl + '/auth/resend-activation-email', username, { responseType: 'text' });
   }
 }

@@ -15,6 +15,7 @@ import javax.validation.ConstraintViolationException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,5 +65,10 @@ public class CommonService {
         //So v.getMessage() can also bve used.
         //Similarly [.reduce((f,s) -> f +", "+s).orElse(null);] can also be used in place of
         //[.collect(Collectors.joining(", "))]. Both will produce same result;
+    }
+
+    public boolean isStringANumber(String str) {
+        String regex = "[0-9]+[\\.]?[0-9]*";
+        return Pattern.matches(regex, str);
     }
 }
