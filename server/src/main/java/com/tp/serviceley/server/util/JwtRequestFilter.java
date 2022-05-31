@@ -1,7 +1,7 @@
 package com.tp.serviceley.server.util;
+
 import com.tp.serviceley.server.model.redis.RedisSession;
 import com.tp.serviceley.server.service.auth.UserDetailsServiceImpl;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,7 +25,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private UserDetailsServiceImpl userDetailsService;
     @Autowired
     private RedisUtil redisUtil;
-
     @Value("${app.security.jwt.expiration.time}")
     private Long jwtExpirationInMillis;
 
@@ -45,7 +44,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             }
             Long userId = jwtProvider.extractUserId(jwt);
             String email = jwtProvider.extractUsername(jwt);
-            if(userId == session.getUserId() && email == session.getEmail()) username = email;
+            if(userId == session.getUserId() && email.equals(session.getEmail())) username = email;
         }
 
         if(username !=null){

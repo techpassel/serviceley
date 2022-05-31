@@ -1,5 +1,6 @@
 package com.tp.serviceley.server.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tp.serviceley.server.model.redis.RedisSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -44,7 +45,8 @@ public class RedisUtil {
      * Save data
      */
     public RedisSession get(String key){
-        return (RedisSession) redisUtil.redisTemplate.opsForValue().get(key);
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(redisUtil.redisTemplate.opsForValue().get(key), RedisSession.class);
     }
 
     /**

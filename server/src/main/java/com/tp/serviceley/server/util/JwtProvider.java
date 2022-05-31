@@ -113,7 +113,7 @@ public class JwtProvider {
     //To extract the username from token
     public Long extractUserId(String token){
         try{
-            return (Long) getAllClaimsFromToken(token).get("userId");
+            return Long.valueOf((int) getAllClaimsFromToken(token).get("userId"));
         } catch(NullPointerException e) {
             return null;
         }

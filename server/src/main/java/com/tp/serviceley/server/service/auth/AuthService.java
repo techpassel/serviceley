@@ -19,7 +19,6 @@ import com.tp.serviceley.server.service.MailContentBuilder;
 import com.tp.serviceley.server.service.MailService;
 import com.tp.serviceley.server.service.user.CartService;
 import com.tp.serviceley.server.util.RedisUtil;
-import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

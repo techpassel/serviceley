@@ -5,18 +5,15 @@ import com.tp.serviceley.server.dto.ResetPasswordRequestDto;
 import com.tp.serviceley.server.dto.SignupRequestDto;
 import com.tp.serviceley.server.exception.BackendException;
 import com.tp.serviceley.server.model.User;
-import com.tp.serviceley.server.model.enums.UserType;
 import com.tp.serviceley.server.service.CommonService;
 import com.tp.serviceley.server.service.auth.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ConstraintViolationException;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController

@@ -27,6 +27,7 @@ public class CartService {
     private final ServiceFrequencyRepository serviceFrequencyRepository;
     private final CartItemMapper cartItemMapper;
     private final CartMapper cartMapper;
+    private final UserRepository userRepository;
 
     @Async
     public void createCart(User user) {
@@ -76,5 +77,11 @@ public class CartService {
         cartItems.remove(toRemoveCartItem);
         cart.setItems(cartItems);
         return cartMapper.mapToDto(cartRepository.save(cart));
+    }
+
+    public CartResponseDto getUserCartDetails(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new BackendException("User not found"));
+        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new BackendException("Cart not found"));
+        return cartMapper.mapToDto(cart);
     }
 }

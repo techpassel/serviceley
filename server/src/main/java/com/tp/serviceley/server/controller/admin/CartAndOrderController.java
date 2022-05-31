@@ -18,7 +18,7 @@ import java.util.Map;
 public class CartAndOrderController {
     private final OrderService orderService;
 
-    @RequestMapping(method = RequestMethod.PUT, value="/cancel")
+    @RequestMapping(method = RequestMethod.PUT, value="/cancel-order")
     public ResponseEntity<?> cancelOrder(@RequestBody Map<String, Object> data){
         try{
             return new ResponseEntity<>(orderService.cancelOrder(data), HttpStatus.OK);
