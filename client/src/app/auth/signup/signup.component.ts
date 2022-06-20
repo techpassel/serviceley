@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SignupRequestData } from 'src/models/signup-request-data';
-import { AuthService } from 'src/services/auth/auth.service';
+import { AuthService } from 'src/services/api-related/auth/auth.service';
 import { CommonService } from 'src/services/common/common.service';
-import { ToastrUtil } from 'src/utils/toastr.util';
+import ToastrUtil from 'src/utils/toastr.util';
 
 @Component({
   selector: 'app-signup',

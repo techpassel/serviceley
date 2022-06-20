@@ -42,7 +42,7 @@ public class RedisUtil {
     }
 
     /**
-     * Save data
+     * Get data
      */
     public RedisSession get(String key){
         ObjectMapper mapper = new ObjectMapper();
@@ -53,7 +53,7 @@ public class RedisUtil {
      * Get expiration time according to key
      */
     public Long getExpire(String key){
-        return redisUtil.redisTemplate.getExpire(key,TimeUnit.SECONDS);
+        return redisUtil.redisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
     /**
@@ -67,6 +67,13 @@ public class RedisUtil {
      * Set the expiration time according to the key
      */
     public Boolean expire(String key,long time){
-        return redisUtil.redisTemplate.expire(key,time , TimeUnit.SECONDS);
+        return redisUtil.redisTemplate.expire(key, time, TimeUnit.SECONDS);
+    }
+
+    /**
+     * Remove data
+     */
+    public Boolean remove(String key){
+        return redisUtil.redisTemplate.delete(key);
     }
 }

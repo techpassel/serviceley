@@ -3,8 +3,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { LoginRequestData } from 'src/models/login-request-data';
 import { UserData } from 'src/models/user-data';
-import { AuthService } from 'src/services/auth/auth.service';
-import { ToastrUtil } from 'src/utils/toastr.util';
+import { AuthService } from 'src/services/api-related/auth/auth.service';
+import ToastrUtil from 'src/utils/toastr.util';
+import SessionUtil from 'src/utils/session.util';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { SessionObservableService } from 'src/services/observables-related/session-observable.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -28,10 +32,29 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private toastr: ToastrUtil) { }
+    private toastr: ToastrUtil,
+    private sessionUtil: SessionUtil,
+    private router: Router,
+    private sessionObservableService: SessionObservableService,
+    private activatedRoute: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
+    if (this.sessionUtil.sessionExist()) {
+      this.redirect();
+    }
     this.initializeLoginForm();
+  }
+
+  redirect = () => {
+    this.activatedRoute.queryParams.subscribe(param => {
+      if ('redirect' in param && !param['redirect'].includes("auth")) {
+        this.router.navigateByUrl(param.redirect);
+        //Pass querystring as - http://localhost:4200/auth/login?redirect=auth
+      } else {
+        this.router.navigateByUrl("");
+      }
+    })
   }
 
   /**
@@ -70,7 +93,6 @@ export class LoginComponent implements OnInit {
   get f() { return this.signinForm.controls; }
 
   onSubmit() {
-
     this.submitted = true;
 
     // return from here if form is invalid
@@ -78,20 +100,20 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.isProcessing = true;
     this.loginRequestData.username = this.signinForm.value.username;
     this.loginRequestData.password = this.signinForm.value.password;
     this.signin$();
   }
 
   signin$(): void {
+    this.isProcessing = true;
     this.authService.login(this.loginRequestData).subscribe(
       (response: any) => {
-        console.log(response);
-        
-        this.toastr.showSuccess("Logged in successfully.");
-        //We have to write logic here
+        this.sessionUtil.saveSession(response);
         this.isProcessing = false;
+        this.toastr.showSuccess("Logged in successfully.");
+        this.sessionObservableService.emitSessionEvent(true);
+        this.redirect();
       },
       (error: any) => {
         if (error.status == 406) {
@@ -126,7 +148,7 @@ export class LoginComponent implements OnInit {
   }
 
   onKeyUp(type: any) {
-    if (type === 'username'){
+    if (type === 'username') {
       this.invalidEmail = false;
       this.invalidPhone = false;
     }

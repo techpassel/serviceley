@@ -171,7 +171,7 @@ public class AuthService {
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         final String jwt = jwtProvider.generateToken(userDetails, user);
-        String sessionKey = RandomStringUtils.randomAlphanumeric(24);
+        String sessionKey = RandomStringUtils.randomAlphanumeric(37);
         RedisSession session = new RedisSession(user.getId(), user.getEmail(), jwt);
         redisUtil.set(sessionKey, session, jwtExpirationInMillis);
         return new LoginResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(),
@@ -224,5 +224,9 @@ public class AuthService {
         userRepository.save(tokenUser);
         verificationTokenRepository.deleteById(verToken.getId());
         return "Password reset successfully";
+    }
+
+    public Boolean logout(String session){
+        return redisUtil.remove(session);
     }
 }

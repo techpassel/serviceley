@@ -38,13 +38,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if(authHeader != null && authHeader.startsWith("Bearer ")){
             String sessionKey = authHeader.substring(7);
-            if(redisUtil.hasKey(sessionKey) && redisUtil.expire(sessionKey, jwtExpirationInMillis)){
+            if(redisUtil.hasKey(sessionKey) && redisUtil.getExpire(sessionKey)> 0){
                 session = redisUtil.get(sessionKey);
                 jwt = session.getToken();
             }
             Long userId = jwtProvider.extractUserId(jwt);
             String email = jwtProvider.extractUsername(jwt);
-            if(userId == session.getUserId() && email.equals(session.getEmail())) username = email;
+            if(session != null && userId == session.getUserId() && email.equals(session.getEmail())) username = email;
         }
 
         if(username !=null){

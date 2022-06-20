@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   baseApiUrl: 'http://localhost:8080/api',
-  appName: 'Casaider'
+  appName: 'Casaider',
+  sessionSecret: '4R5Jfg@h46rfhJ!FG5n4k57&fgnA@n5ghn5gAh45'
 };
 
 /*

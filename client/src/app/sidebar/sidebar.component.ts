@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
+import { SessionObservableService } from 'src/services/observables-related/session-observable.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -6,28 +7,33 @@ import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-
-  constructor() { }
+  isSession!: boolean;
+  constructor(
+    private sessionObservableService: SessionObservableService
+  ) { }
 
   ngOnInit(): void {
+    this.sessionObservableService.sessionEventListener().subscribe(info => {
+      this.isSession = info;
+    })
   }
 
   @Output() sidebarClosed: EventEmitter<string> = new EventEmitter();
 
   @ViewChild('first', { static: false })
-  firstDropdown! : ElementRef;
+  firstDropdown!: ElementRef;
   @ViewChild('second', { static: false })
-  secondDropdown! : ElementRef;
+  secondDropdown!: ElementRef;
   @ViewChild('third', { static: false })
-  thirdDropdown! : ElementRef;
+  thirdDropdown!: ElementRef;
   @ViewChild('firstArrow', { static: false })
-  firstArrow! : ElementRef;
+  firstArrow!: ElementRef;
   @ViewChild('secondArrow', { static: false })
-  secondArrow! : ElementRef;
+  secondArrow!: ElementRef;
   @ViewChild('thirdArrow', { static: false })
-  thirdArrow! : ElementRef;
+  thirdArrow!: ElementRef;
   @ViewChild('sidebar', { static: false })
-  sidebarElement! : ElementRef;
+  sidebarElement!: ElementRef;
 
   toggleShowMenu = (val: string, currentElement: HTMLElement) => {
     let component = null;
@@ -59,15 +65,15 @@ export class SidebarComponent implements OnInit {
   }
 
   closeAllSubMenu = () => {
-    if(this.firstDropdown.nativeElement.classList.contains('show_menu')){
+    if (this.firstDropdown.nativeElement.classList.contains('show_menu')) {
       this.firstDropdown.nativeElement.classList.remove('show_menu');
       this.firstArrow.nativeElement.classList.toggle('transform_arrow')
     }
-    if(this.secondDropdown.nativeElement.classList.contains('show_menu')){
+    if (this.secondDropdown.nativeElement.classList.contains('show_menu')) {
       this.secondDropdown.nativeElement.classList.remove('show_menu');
       this.secondArrow.nativeElement.classList.toggle('transform_arrow')
     }
-    if(this.thirdDropdown.nativeElement.classList.contains('show_menu')){
+    if (this.thirdDropdown.nativeElement.classList.contains('show_menu')) {
       this.thirdDropdown.nativeElement.classList.remove('show_menu');
       this.thirdArrow.nativeElement.classList.toggle('transform_arrow')
     }

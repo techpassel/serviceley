@@ -105,7 +105,7 @@
                 <li><a class="link_name" href="#">Setting</a></li>
             </ul>
         </li>
-        <li>
+        <li *ngIf="isSession">
             <div class="profile_details">
                 <img src="../assets/images/profile.jpg" alt="Profile">
                 <div class="name_usertype">
