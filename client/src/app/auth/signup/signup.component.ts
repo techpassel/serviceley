@@ -91,6 +91,7 @@ export class SignupComponent implements OnInit {
       this.toastr.showSuccess("Congratulations! You have registered successfully.");
       this.isUserRegistered = true;
       this.isProcessing = false;
+      this.initializeSignupForm();
     },
       (error: any) => {
         this.isProcessing = false;
@@ -110,5 +111,4 @@ export class SignupComponent implements OnInit {
         }
       });
   }
-
 }

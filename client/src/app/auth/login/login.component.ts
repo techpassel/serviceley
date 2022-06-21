@@ -52,7 +52,14 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl(param.redirect);
         //Pass querystring as - http://localhost:4200/auth/login?redirect=auth
       } else {
-        this.router.navigateByUrl("");
+        const sessionData = this.sessionUtil.getSession();
+        const onboardingStages = ['/onboarding', '/onboarding/address', '/onboarding/mobile-verification']
+        if (sessionData.userType == "user") {
+          if (sessionData.onboardingStage >= 0 && sessionData.onboardingStage <= 2)
+            this.router.navigateByUrl(onboardingStages[sessionData.onboardingStage])
+          else
+            this.router.navigateByUrl("/user");
+        }
       }
     })
   }

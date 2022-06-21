@@ -8,7 +8,7 @@ export class AuthObservableService {
 
   constructor() { }
 
-  private authRouteEvent = new BehaviorSubject<boolean>(false);
+  private authRouteEvent = new BehaviorSubject<boolean>(true);
 
   emitAuthRouteEvent(val: boolean) {
     this.authRouteEvent.next(val)

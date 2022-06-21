@@ -1,12 +1,12 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthObservableService } from 'src/services/observables-related/auth-observable.service';
 
 @Component({
-  selector: 'app-auth',
-  templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.scss']
+  selector: 'app-onboarding',
+  templateUrl: './onboarding.component.html',
+  styleUrls: ['./onboarding.component.scss']
 })
-export class AuthComponent implements OnInit {
+export class OnboardingComponent implements OnInit {
 
   constructor(private authObservableService: AuthObservableService) { }
 

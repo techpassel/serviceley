@@ -50,5 +50,6 @@ export class HeaderComponent implements OnInit {
         console.log("Session deleted successfully.");
       }
     )
+    this.router.navigateByUrl("/");
   }
 }
