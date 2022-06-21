@@ -14,4 +14,5 @@ public class LoginResponseDto {
     private String email;
     private String userType;
     private String token;
+    private Integer onboardingStage;
 }

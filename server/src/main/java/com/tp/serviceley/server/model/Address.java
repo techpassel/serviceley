@@ -31,6 +31,9 @@ public class Address {
     private String state;
 
     @NotBlank
+    private String country;
+
+    @NotBlank
     private String city;
 
     private String area;
@@ -40,10 +43,8 @@ public class Address {
     @NotBlank
     private String address;
 
-    @NotNull
     private Double latitude;
 
-    @NotNull
     private Double longitude;
 
     @Column(name = "gps_details")

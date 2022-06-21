@@ -175,7 +175,7 @@ public class AuthService {
         RedisSession session = new RedisSession(user.getId(), user.getEmail(), jwt);
         redisUtil.set(sessionKey, session, jwtExpirationInMillis);
         return new LoginResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(),
-                user.getUserType().getType(), sessionKey);
+                user.getUserType().getType(), sessionKey, user.getOnboardingState());
     }
 
     public String createForgetPassword(String email) {

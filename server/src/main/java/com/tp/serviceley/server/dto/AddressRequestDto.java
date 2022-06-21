@@ -11,6 +11,7 @@ public class AddressRequestDto {
     private Long id;
     private Long userId;
     private Integer pinCode;
+    private String country;
     private String state;
     private String city;
     private String area;

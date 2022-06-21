@@ -61,4 +61,7 @@ public class User extends CreateUpdateRecord{
 
     @Column(name= "usertype")
     private UserType userType;
+
+    @Column(name = "onboarding_stage")
+    private Integer onboardingState = 0;
 }
