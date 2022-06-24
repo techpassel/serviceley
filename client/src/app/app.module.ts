@@ -8,9 +8,10 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { HttpRequestInterceptor } from 'src/utils/http-request.interceptor';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { ToastrModule } from 'ngx-toastr';
       }
     }), // ToastrModule added
   ],
-  providers: [],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

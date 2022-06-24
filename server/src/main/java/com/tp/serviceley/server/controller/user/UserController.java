@@ -42,6 +42,17 @@ public class UserController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public ResponseEntity<?> getUserDetails(@PathVariable Long id){
+        try{
+            return new ResponseEntity<>(userService.getUserDetails(id), HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto updateUserDto){
         try{

@@ -2,7 +2,8 @@ package com.tp.serviceley.server.model.enums;
 
 public enum Gender {
     Male("male"),
-    Female("female");
+    Female("female"),
+    Other("other");
 
     private String type;
 

@@ -1,1 +1,73 @@
-<p>user-details works!</p>
+<div>
+    <h1 class="title">User Details</h1>
+    <form [formGroup]="userDetailsForm" (ngSubmit)="onSubmit()" class="form">
+        <div class="form_container">
+            <div class="group_inputs">
+                <div>
+                    <input type="text" placeholder="First name" formControlName="firstName" class="form_input">
+                    <div *ngIf="submitted && f.firstName.errors" class="error-text">
+                        <div *ngIf="f.firstName.errors.required">First Name is required</div>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" placeholder="Last name" formControlName="lastName" class="form_input">
+                    <div *ngIf="submitted && f.lastName.errors" class="error-text">
+                        <div *ngIf="f.lastName.errors.required">Last Name is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="group_inputs">
+                <div>
+                    <input type="text" placeholder="Email" formControlName="email" class="form_input">
+                    <div *ngIf="submitted && f.email.errors" class="error-text">
+                        <div *ngIf="f.email.errors.required">Email is required</div>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" placeholder="Phone" formControlName="phone" class="form_input">
+                    <div *ngIf="submitted && f.phone.errors" class="error-text">
+                        <div *ngIf="f.phone.errors.required">Phone is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="group_inputs">
+                <div>
+                    <div class="radio_group">
+                        <div>
+                            Gender :
+                        </div>
+                        <div>
+                            <input type="radio" formControlName="gender" value="Male">
+                            <label class="radio_label">Male</label><br>
+                        </div>
+                        <div>
+                            <input type="radio" formControlName="gender" value="Female">
+                            <label class="radio_label">Female</label><br>
+                        </div>
+                        <div>
+                            <input type="radio" formControlName="gender" value="Other">
+                            <label class="radio_label">Other</label>
+                        </div>
+                    </div>
+                    <div *ngIf="submitted && f.gender.errors" class="error-text">
+                        <div *ngIf="f.gender.errors.required">Gender is required</div>
+                    </div>
+                </div>
+                <div>
+                    <mat-form-field appearance="fill" id="dob_group">
+                        <mat-label>Date of birth - MM/DD/YYYY</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="dob" class="dob_input">
+                        <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <div *ngIf="submitted && f.dob.errors" class="error-text">
+                        <div *ngIf="f.dob.errors.required">Date of birth is required</div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div *ngIf="customError != null && customError != ''" class="error-text">{{customError}}</div> -->
+            <button class="button" type="submit">{{!isProcessing?'Submit':'Processing...'}}</button>
+        </div>
+    </form>
+</div>

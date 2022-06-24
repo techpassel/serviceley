@@ -50,18 +50,10 @@ public class UserService {
                 addressRepository.save(userDefaultAddress);
             }
         } else {
-            if(addressRequestDto.getId() != null){
-                if(userDefaultAddress.getId() == addressRequestDto.getId()){
-                    addressRequestDto.setIsDefaultAddress(true);
-                } else {
-                    addressRequestDto.setIsDefaultAddress(false);
-                }
+            if (addressRequestDto.getId() != null) {
+                addressRequestDto.setIsDefaultAddress(userDefaultAddress.getId() == addressRequestDto.getId());
             } else {
-                if(userDefaultAddress == null){
-                    addressRequestDto.setIsDefaultAddress(true);
-                } else {
-                    addressRequestDto.setIsDefaultAddress(false);
-                }
+                addressRequestDto.setIsDefaultAddress(userDefaultAddress == null);
             }
         }
 
@@ -88,21 +80,41 @@ public class UserService {
         }
     }
 
-    public UpdateUserDto updateUser(UpdateUserDto updateUserDto){
+    public UpdateUserDto getUserDetails(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new BackendException("User not found."));
+        return UpdateUserDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
+                .dob(user.getDob())
+                .gender(user.getGender())
+                .userType(user.getUserType())
+                .build();
+    }
+
+    public UpdateUserDto updateUser(UpdateUserDto updateUserDto) {
         Long userId = updateUserDto.getId();
-        if(userId == null){
+        if (userId == null) {
             throw new BackendException("User id can't be null.");
         }
         User user = userRepository.findById(userId).orElseThrow(() -> new BackendException("User not found."));
-        if(user.getEmail() != updateUserDto.getEmail() || user.getPhone() != updateUserDto.getPhone()) throw
-                new BackendException("This Api is not meant for updating email phone. Please use it to " +
-                        "update other fields only.");
-        user.setFirstName(updateUserDto.getFirstName());
-        user.setLastName(updateUserDto.getLastName());
-        user.setGender(updateUserDto.getGender());
-        user.setUserType(updateUserDto.getUserType());
-        user.setGender(updateUserDto.getGender());
-        user.setPhone(updateUserDto.getPhone());
+        if (updateUserDto.getEmail() != null && user.getEmail() != updateUserDto.getEmail())
+            throw new BackendException("This Api is not meant for updating email.");
+        if(updateUserDto.getPhone() != null && user.getPhone() != updateUserDto.getPhone() &&
+                user.getOnboardingState() > 2){
+            throw new BackendException("This Api is not meant for updating phone.");
+        }
+        if (updateUserDto.getFirstName() != null) user.setFirstName(updateUserDto.getFirstName());
+        if (updateUserDto.getLastName() != null) user.setLastName(updateUserDto.getLastName());
+        if (updateUserDto.getGender() != null) user.setGender(updateUserDto.getGender());
+        if (updateUserDto.getUserType() != null) user.setUserType(updateUserDto.getUserType());
+        if (updateUserDto.getDob() != null) user.setDob(updateUserDto.getDob());
+        if (updateUserDto.getPhone() != null) user.setPhone(updateUserDto.getPhone());
+        if (user.getOnboardingState() == 0) {
+            user.setOnboardingState(1);
+        }
         User updatedUser = userRepository.save(user);
         return UpdateUserDto.builder()
                 .id(updatedUser.getId())
@@ -115,17 +127,17 @@ public class UserService {
                 .build();
     }
 
-    public String sendMobileVerificationToken(Long userId, String phone){
+    public String sendMobileVerificationToken(Long userId, String phone) {
         User user = userRepository.findById(userId).orElseThrow(() -> new BackendException
                 ("User with given id not found."));
-        if(user.getPhone() == null || user.getPhone() != phone){
+        if (user.getPhone() == null || user.getPhone() != phone) {
             user.setPhone(phone);
             userRepository.save(user);
         }
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByUserAndTokenType(user, TokenType.PhoneVerificationOTP);
-        if(verificationToken.isPresent()){
+        if (verificationToken.isPresent()) {
             VerificationToken verToken = verificationToken.get();
-            if(LocalDateTime.now().isBefore(verToken.getCreatedAt().plusMinutes(2))){
+            if (LocalDateTime.now().isBefore(verToken.getCreatedAt().plusMinutes(2))) {
                 throw new BackendException("Can't send another OTP now as its not been even 2 minutes " +
                         "when we sent the previous OTP on your number.");
             } else {
@@ -136,13 +148,13 @@ public class UserService {
         return "An OTP for phone verification is sent successfully on the provided number.";
     }
 
-    public String verifyMobileVerificationToken(Long userId, Long otp){
+    public String verifyMobileVerificationToken(Long userId, Long otp) {
         User user = userRepository.findById(userId).orElseThrow(() -> new BackendException
                 ("User with given id not found."));
         VerificationToken verificationToken = verificationTokenRepository.findByUserAndTokenType(user,
                 TokenType.PhoneVerificationOTP).orElseThrow(() -> new BackendException
                 ("User doesn't have requested any mobile verification token."));
-        if(verificationToken.getToken().equals(otp.toString())){
+        if (verificationToken.getToken().equals(otp.toString())) {
             String phone = verificationToken.getUpdatingValue();
             user.setPhone(phone);
             user.setPhoneVerified(true);
@@ -154,12 +166,12 @@ public class UserService {
         return "Mobile number verified and updated successfully.";
     }
 
-    public String sendUpdateEmailVerificationToken(Long userId, String email){
+    public String sendUpdateEmailVerificationToken(Long userId, String email) {
         User user = userRepository.findById(userId).orElseThrow(() -> new BackendException
                 ("User with given id not found."));
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByUserAndTokenType(user,
                 TokenType.EmailUpdateVerification);
-        if(verificationToken.isPresent()){
+        if (verificationToken.isPresent()) {
             VerificationToken verToken = verificationToken.get();
             verificationTokenRepository.deleteById(verToken.getId());
         }
@@ -174,8 +186,8 @@ public class UserService {
         return "A verification email has been sent on the provided email.Your email will be updated after you verify the email";
     }
 
-    private void sendUpdateEmailVerificationEmail(User user, String token){
-        String url = "http://localhost:8080/api/user/update-email/"+token;
+    private void sendUpdateEmailVerificationEmail(User user, String token) {
+        String url = "http://localhost:8080/api/user/update-email/" + token;
         String btnName = "Verify";
         String text = "Please click on the button below to verify your email and register it with your account in serviceley.";
         String msg = mailContentBuilder.build(text, url, btnName);
@@ -185,7 +197,7 @@ public class UserService {
         mailService.sendMail(new NotificationEmail(subject, recipient, msg));
     }
 
-    public String verifyUpdateEmailVerificationToken(String token){
+    public String verifyUpdateEmailVerificationToken(String token) {
         VerificationToken verificationToken = verificationTokenRepository.findByToken(token).orElseThrow(() -> new
                 BackendException("Invalid Token."));
         User user = verificationToken.getUser();
@@ -195,9 +207,9 @@ public class UserService {
         return "Email verified and updated successfully.";
     }
 
-    public String deactivateUser(Long userId, String reason){
+    public String deactivateUser(Long userId, String reason) {
         User currentUser = commonService.getCurrentUser();
-        if(!currentUser.getId().equals(userId) && currentUser.getUserType() != UserType.Staff){
+        if (!currentUser.getId().equals(userId) && currentUser.getUserType() != UserType.Staff) {
             throw new BackendException("You don't have enough permission to deactivate this user.");
         }
         User user = userRepository.findById(userId).orElseThrow(() -> new BackendException

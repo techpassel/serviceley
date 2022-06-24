@@ -15,6 +15,13 @@
     background-color: #020091 !important;
 }
 
+.mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: white !important;
+    border: 1px solid black;
+}
+
 @import "./styles-bootstrap.scss";
 @import "./styles-common.scss";
 @import url('https://fonts.googleapis.com/css?family=Muli:300,400,600&display=swap');
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

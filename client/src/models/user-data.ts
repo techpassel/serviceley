@@ -1,8 +1,9 @@
 export class UserData {
     id!: number;
     firstName!: string;
-    lsstName!: string;
+    lastName!: string;
     email!: string;
-    userType!: string;
-    token!: string;
+    phone!: string;
+    gender!: string;
+    dob!: string;
 }

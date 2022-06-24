@@ -131,7 +131,7 @@ public class JwtProvider {
             return Jwts.parserBuilder().setSigningKey(getPublickey()).build().parseClaimsJws(token).getBody();
             //Handle exceptions as per your requirement.
         } catch (ExpiredJwtException e) {
-            System.out.println("Token expired ");
+            System.out.println("Token expired");
         } catch(Exception e){
             System.out.println("Some other exception in JWT parsing ");
         }

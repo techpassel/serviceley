@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { LoginRequestData } from 'src/models/login-request-data';
-import { UserData } from 'src/models/user-data';
 import { AuthService } from 'src/services/api-related/auth/auth.service';
 import ToastrUtil from 'src/utils/toastr.util';
 import SessionUtil from 'src/utils/session.util';
@@ -27,7 +26,6 @@ export class LoginComponent implements OnInit {
   emailVerificationNeeded: boolean = false;
   emailVerificationResendSuccess: boolean = false;
   appName = environment.appName;
-  userInfo = new UserData();
 
   constructor(
     private formBuilder: FormBuilder,
