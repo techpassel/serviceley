@@ -1,1 +1,61 @@
-<p>address works!</p>
+<div>
+    <h1 class="title">Address</h1>
+    <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="form">
+        <div class="form_container">
+            <div class="group_inputs">
+                <div>
+                    <input type="text" placeholder="Address" formControlName="address" class="form_input_full">
+                    <div *ngIf="submitted && f.address.errors" class="error-text">
+                        <div *ngIf="f.address.errors.required">Address is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="group_inputs">
+                <div>
+                    <input type="text" placeholder="Landmark" formControlName="landmark" class="form_input_full">
+                    <div *ngIf="submitted && f.landmark.errors" class="error-text">
+                        <div *ngIf="f.landmark.errors.required">Landmark is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="group_inputs">
+                <div>
+                    <!-- <input type="text" placeholder="State" formControlName="state" class="form_input"> -->
+                    <select formControlName="state" class="form_input" (change)="setState($event)">
+                        <option disabled value="">Select state</option>
+                        <option *ngFor="let state of states" [value]="state.id">{{state.state}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.state.errors" class="error-text">
+                        <div *ngIf="f.state.errors.required">State is required</div>
+                    </div>
+                </div>
+                <div>
+                    <!-- <input type="text" placeholder="City" formControlName="city" class="form_input"> -->
+                    <select formControlName="city" class="form_input">
+                        <option disabled value="">Select city</option>
+                        <option *ngFor="let city of cities" [value]="city?.name">{{city?.name}}</option>
+                    </select>
+                    <div *ngIf="submitted && f.city.errors" class="error-text">
+                        <div *ngIf="f.city.errors.required">City is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="group_inputs">
+                <div>
+                    <input type="text" placeholder="Area like society, colony etc." formControlName="area"
+                        class="form_input">
+                    <div *ngIf="submitted && f.area.errors" class="error-text">
+                        <div *ngIf="f.area.errors.required">Area is required</div>
+                    </div>
+                </div>
+                <div>
+                    <input type="text" placeholder="Pincode" formControlName="pincode" class="form_input">
+                    <div *ngIf="submitted && f.pincode.errors" class="error-text">
+                        <div *ngIf="f.pincode.errors.required">Pincode is required</div>
+                    </div>
+                </div>
+            </div>
+            <button class="button" type="submit">{{!isProcessing?'Submit':'Processing...'}}</button>
+        </div>
+    </form>
+</div>

@@ -18,10 +18,10 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     private final UserService userService;
-
     @RequestMapping(method = RequestMethod.POST, value = "/address")
     public ResponseEntity<?> createAddress(@RequestBody AddressRequestDto addressRequestDto){
         try{
+            System.out.println(addressRequestDto);
             return new ResponseEntity<>(userService.createAddress(addressRequestDto), HttpStatus.CREATED);
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -29,7 +29,16 @@ public class UserController {
             return new ResponseEntity<>("Some error occurred. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    @RequestMapping(method = RequestMethod.GET, value = "/address/{userId}")
+    public ResponseEntity<?> getUserAddresses(@PathVariable Long userId){
+        try{
+            return new ResponseEntity<>( userService.getUserAddresses(userId), HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @RequestMapping(method = RequestMethod.DELETE, value = "/address/{id}")
     public ResponseEntity<?> deleteAddress(@PathVariable Long id){
         try{
@@ -41,7 +50,6 @@ public class UserController {
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     public ResponseEntity<?> getUserDetails(@PathVariable Long id){
         try{
@@ -52,7 +60,6 @@ public class UserController {
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @RequestMapping(method = RequestMethod.PUT, value = "")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUserDto updateUserDto){
         try{

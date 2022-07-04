@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { Address } from 'src/models/address-data';
 import { UserData } from 'src/models/user-data';
 
 @Injectable({
@@ -11,14 +12,22 @@ import { UserData } from 'src/models/user-data';
 export class OnboardingService {
     baseApiUrl: string = environment.baseApiUrl;
 
-    constructor(private http: HttpClient) { 
+    constructor(private http: HttpClient) {
     }
 
     getUser(id: number): any {
-        return this.http.get(this.baseApiUrl + '/user/'+id);
+        return this.http.get(this.baseApiUrl + '/user/' + id);
     }
 
     updateUser(userData: UserData): any {
         return this.http.put(this.baseApiUrl + '/user/', userData);
+    }
+
+    updateAddress(address: Address): any {
+        return this.http.post(this.baseApiUrl + "/user/address", address)
+    }
+
+    getUserAddresses(userId: number): any {
+        return this.http.get(this.baseApiUrl + '/user/address/' + userId);
     }
 }

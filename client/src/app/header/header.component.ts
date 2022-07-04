@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { faBell, faCartShopping, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { AuthService } from 'src/services/api-related/auth/auth.service';
+import { CommonService } from 'src/services/common/common.service';
 import { AuthObservableService } from 'src/services/observables-related/auth-observable.service';
 import { SessionObservableService } from 'src/services/observables-related/session-observable.service';
-import SessionUtil from 'src/utils/session.util';
 import ToastrUtil from 'src/utils/toastr.util';
 
 @Component({
@@ -22,10 +21,9 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private authObservableService: AuthObservableService,
-    private sessionUnit: SessionUtil,
     private sessionObservableService: SessionObservableService,
-    private toastr: ToastrUtil,
-    private authService: AuthService
+    private commonService: CommonService,
+    private toastr: ToastrUtil
   ) { }
 
   ngOnInit(): void {
@@ -42,14 +40,8 @@ export class HeaderComponent implements OnInit {
   }
 
   logout = (): void => {
-    const session = this.sessionUnit.clearSession();
+    this.commonService.logout();
     this.toastr.showSuccess("Logged out successfully.");
-    this.sessionObservableService.emitSessionEvent(false);
-    this.authService.deleteSession(session).subscribe(
-      (res: any) => {
-        console.log("Session deleted successfully.");
-      }
-    )
     this.router.navigateByUrl("/");
   }
 }

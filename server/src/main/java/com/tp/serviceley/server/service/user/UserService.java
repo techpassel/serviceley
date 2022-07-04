@@ -22,7 +22,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -45,7 +47,7 @@ public class UserService {
         //Every user must have one and only one default address. We have to ensure it.
         Address userDefaultAddress = addressRepository.findUserDefaultAddress(user);
         if (addressRequestDto.getIsDefaultAddress() != null && addressRequestDto.getIsDefaultAddress() == true) {
-            if (userDefaultAddress != null) {
+            if (userDefaultAddress != null && userDefaultAddress.getId() != addressRequestDto.getId()) {
                 userDefaultAddress.setIsDefaultAddress(false);
                 addressRepository.save(userDefaultAddress);
             }
@@ -59,7 +61,17 @@ public class UserService {
 
         Address address = addressMapper.mapToModel(addressRequestDto, user);
         Address createdAddress = addressRepository.save(address);
+        if(user.getOnboardingState() < 2){
+            user.setOnboardingState(2);
+            userRepository.save(user);
+        }
         return addressMapper.mapToDto(createdAddress);
+    }
+
+    public List<AddressResponseDto> getUserAddresses(Long userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new BackendException("User with given userId not found."));
+        List<Address> addresses = addressRepository.findByUser(user);
+        return addresses.stream().map(addressMapper::mapToDto).collect(Collectors.toList());
     }
 
     public void deleteAddress(Long id) {

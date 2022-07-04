@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class AddressRequestDto {
     private Long id;
     private Long userId;
-    private Integer pinCode;
+    private Integer pincode;
     private String country;
     private String state;
     private String city;

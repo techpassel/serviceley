@@ -25,7 +25,7 @@ public class Address {
 
     @NotNull
     @Column(name = "pin_code", nullable = false)
-    private Integer pinCode;
+    private Integer pincode;
 
     @NotBlank
     private String state;

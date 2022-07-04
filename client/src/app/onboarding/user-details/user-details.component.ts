@@ -10,7 +10,7 @@ import ToastrUtil from 'src/utils/toastr.util';
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.scss']
+  styleUrls: ['./user-details.component.scss', '../onboarding.component.scss']
 })
 export class UserDetailsComponent implements OnInit {
   userDetailsForm!: FormGroup;
@@ -27,7 +27,7 @@ export class UserDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeUserDetailsForm();
-    this.getUserData();
+    this.getUserData$();
   }
 
   /**
@@ -55,7 +55,7 @@ export class UserDetailsComponent implements OnInit {
   /**
    * To get user data
    */
-  getUserData = () => {
+  getUserData$ = () => {
     const sessionData = this.sessionUtil.getSession();
     this.onboardingService.getUser(sessionData.id).subscribe((response: any) => {
       // Converting dob in correct format.
@@ -69,13 +69,13 @@ export class UserDetailsComponent implements OnInit {
     },
       (error: any) => {
         console.log(error);
-
       }
     )
   }
 
   onSubmit = () => {
     this.submitted = true;
+    this.isProcessing = true;
 
     // return from here if form is invalid.
     if (this.userDetailsForm.invalid) {
@@ -103,9 +103,11 @@ export class UserDetailsComponent implements OnInit {
       this.sessionUtil.saveSession(session);
       this.toastr.showSuccess("Userdata updated successfully");
       this.router.navigateByUrl("/onboarding/address");
+      this.isProcessing = false;
     },
       (error: any) => {
         console.log(error);
+        this.isProcessing = false;
       })
   }
 }

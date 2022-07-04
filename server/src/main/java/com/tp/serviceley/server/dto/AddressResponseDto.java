@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class AddressResponseDto {
     private Long id;
     private DtoUser user;
-    private Integer pinCode;
+    private Integer pincode;
     private String state;
     private String city;
     private String area;
