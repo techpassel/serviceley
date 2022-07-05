@@ -9,6 +9,8 @@ import { MobileVerificationComponent } from './mobile-verification/mobile-verifi
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialImportModule } from '../../utils/material.module'
 import { MatNativeDateModule } from '@angular/material/core';
+import { NgOtpInputModule } from 'ng-otp-input';
+import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   declarations: [
     OnboardingComponent,
@@ -22,7 +24,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     FormsModule,
     ReactiveFormsModule,
     MaterialImportModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatDialogModule,
+    NgOtpInputModule
   ]
 })
 export class OnboardingModule { }

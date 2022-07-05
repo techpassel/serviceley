@@ -1,1 +1,55 @@
-<p>mobile-verification works!</p>
+<div>
+    <h1 class="title">Mobile Verification</h1>
+    <div class="mv-container">
+        <div class="phone-container">
+            <div class="phone-label">Mobile Number : </div>
+            <input type="text" [(ngModel)]="phone" class="phone-input" disabled>
+            <button class="phone-button" (click)="onSendBtnClick()" [disabled]="isSendOtpBtnDisabled">Send OTP</button>
+        </div>
+        <p *ngIf="isSendOtpBtnDisabled">You can resend otp after {{stopTime}} seconds.</p>
+        <div class="validation-error" *ngIf="displayMessage != ''">{{displayMessage}}</div>
+        <div class="update-num">Do you want to update your mobile number? <span class="update-num-link"
+                (click)="openUpdatePhoneModal()">Click here!</span></div>
+        <div *ngIf="showOtpComponent" class="opt-component">
+            <span class="otp-label">Enter verification code</span>
+            <ng-otp-input #ngOtpInput class="ng-otp-input" (onInputChange)="onOtpChange($event)" [config]="config">
+            </ng-otp-input>
+            <p class="error-text" *ngIf="temp">Sorry but currently our application can send SMS on pre-verified
+                phone numbers only as currently we are using AWS SNS test account for sending SMS. So as a temporary
+                workaround we have populated OTP in the above desired field. You just click
+                on the "Verify OTP" button and proceed further.</p>
+            <button class="btn btn-success" (click)="verifyOtp$()">Verify OTP</button>
+        </div>
+    </div>
+</div>
+<div class="overlay" [ngClass]="isModelOpen?'overlay-show':'overlay-hide'">
+    <div class="modal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">Update your mobile number</span>
+                </div>
+                <form (ngSubmit)="updatePhone()" #f="ngForm">
+                    <div class="modal-body">
+                        <p class="input-label">Enter your mobile number : </p>
+                        <input class="input-text" type="text" [(ngModel)]="tempPhone" name="mobile" required
+                            minlength="10" maxlength="10" #mobile="ngModel" />
+                        <div class="error-container" *ngIf="mobile.errors && (mobile.dirty || mobile.touched)">
+                            <p class="error-text" *ngIf="mobile.errors.required">Phone number is required.</p>
+                            <p class="error-text" *ngIf="mobile.errors.minlength || mobile.errors.maxlength">Phone
+                                number must be of 10 digits.</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" [disabled]="!f.valid">
+                            Save and send OTP
+                        </button>
+                        <button type="button" class="btn btn-logo" (click)="closePopup()">
+                            Close
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

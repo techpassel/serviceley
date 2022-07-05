@@ -1,36 +1,36 @@
 <div>
     <h1 class="title">User Details</h1>
     <form [formGroup]="userDetailsForm" (ngSubmit)="onSubmit()" class="form">
-        <div class="form_container">
-            <div class="group_inputs">
+        <div class="form-container">
+            <div class="group-inputs">
                 <div>
-                    <input type="text" placeholder="First name" formControlName="firstName" class="form_input">
+                    <input type="text" placeholder="First name" formControlName="firstName" class="form-input">
                     <div *ngIf="submitted && f.firstName.errors" class="error-text">
                         <div *ngIf="f.firstName.errors.required">First Name is required</div>
                     </div>
                 </div>
                 <div>
-                    <input type="text" placeholder="Last name" formControlName="lastName" class="form_input">
+                    <input type="text" placeholder="Last name" formControlName="lastName" class="form-input">
                     <div *ngIf="submitted && f.lastName.errors" class="error-text">
                         <div *ngIf="f.lastName.errors.required">Last Name is required</div>
                     </div>
                 </div>
             </div>
-            <div class="group_inputs">
+            <div class="group-inputs">
                 <div>
-                    <input type="text" placeholder="Email" formControlName="email" class="form_input">
+                    <input type="text" placeholder="Email" formControlName="email" class="form-input">
                     <div *ngIf="submitted && f.email.errors" class="error-text">
                         <div *ngIf="f.email.errors.required">Email is required</div>
                     </div>
                 </div>
                 <div>
-                    <input type="text" placeholder="Phone" formControlName="phone" class="form_input">
+                    <input type="text" placeholder="Phone" formControlName="phone" class="form-input">
                     <div *ngIf="submitted && f.phone.errors" class="error-text">
                         <div *ngIf="f.phone.errors.required">Phone is required</div>
                     </div>
                 </div>
             </div>
-            <div class="group_inputs">
+            <div class="group-inputs">
                 <div>
                     <div class="radio_group">
                         <div>

@@ -80,11 +80,12 @@ public class UserController {
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){
+            System.out.println(e);
             return new ResponseEntity<>("Some error occurred.Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/phone")
+    @RequestMapping(method = RequestMethod.POST, value = "/otp")
     public ResponseEntity<?> verifyMobileVerificationToken(@RequestBody Map<String, Long> data){
         try{
             Long userId = data.get("userId");

@@ -31,16 +31,15 @@ public class SmsService {
     @Autowired
     private VerificationTokenRepository verificationTokenRepository;
 
-    public void sendOtp(User user, TokenType tokenType, String phone) {
-        Integer num = ThreadLocalRandom.current().nextInt(100001, 999999);
-        String sms = "OTP for verifying your phone number on serviceley is " + num + ".";
+    public void sendOtp(User user, TokenType tokenType, String phone, int otp) {
+        String sms = "OTP for verifying your phone number on serviceley is " + otp + ".";
         VerificationToken verificationToken = new VerificationToken();
-        verificationToken.setToken(num.toString());
+        verificationToken.setToken(String.valueOf(otp));
         verificationToken.setTokenType(tokenType);
         verificationToken.setUpdatingValue(phone);
         verificationToken.setUser(user);
         verificationTokenRepository.save(verificationToken);
-        sendSms(phone, sms);
+        //sendSms(phone, sms);
     }
 
     public String sendSms(String phone, String message) {
@@ -57,7 +56,6 @@ public class SmsService {
                     .withPhoneNumber("+91" + phone)
                     .withMessageAttributes(smsAttributes)
                     .withSdkRequestTimeout(requestTimeout));
-            System.out.println(request);
             log.info(String.valueOf(request));
             /*
             -----------------------------------------------------------------------------------------------------------

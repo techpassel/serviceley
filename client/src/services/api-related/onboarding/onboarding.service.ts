@@ -10,7 +10,7 @@ import { UserData } from 'src/models/user-data';
 //The @Injectable() decorator specifies that Angular can use this class in the DI(Dependency injection) system. 
 //The metadata, providedIn: 'root', means that the HeroService is visible throughout the application.
 export class OnboardingService {
-    baseApiUrl: string = environment.baseApiUrl;
+    private baseApiUrl: string = environment.baseApiUrl;
 
     constructor(private http: HttpClient) {
     }
@@ -24,10 +24,18 @@ export class OnboardingService {
     }
 
     updateAddress(address: Address): any {
-        return this.http.post(this.baseApiUrl + "/user/address", address)
+        return this.http.post(this.baseApiUrl + "/user/address", address);
     }
 
     getUserAddresses(userId: number): any {
         return this.http.get(this.baseApiUrl + '/user/address/' + userId);
+    }
+
+    updatePhone(data: any): any {
+        return this.http.post(this.baseApiUrl + "/user/phone", data, { responseType: 'text' });
+    }
+
+    verifyOtp(data: any): any {
+        return this.http.post(this.baseApiUrl + '/user/otp', data, { responseType: 'text' });
     }
 }

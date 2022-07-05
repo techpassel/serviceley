@@ -43,11 +43,11 @@ export default class SessionUtil {
         }
     }
 
-    encryptAES = (data: any) => {
+    private encryptAES = (data: any) => {
         return CryptoJS.AES.encrypt(JSON.stringify(data), this.sessionSecret).toString();
     };
 
-    decryptAES = (encryptedBase64: string) => {
+    private decryptAES = (encryptedBase64: string) => {
         try {
             const decrypted = CryptoJS.AES.decrypt(encryptedBase64, this.sessionSecret);
             if (decrypted) {

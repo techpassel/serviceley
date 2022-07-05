@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 @Service
@@ -142,22 +143,30 @@ public class UserService {
     public String sendMobileVerificationToken(Long userId, String phone) {
         User user = userRepository.findById(userId).orElseThrow(() -> new BackendException
                 ("User with given id not found."));
-        if (user.getPhone() == null || user.getPhone() != phone) {
+        if (user.isPhoneVerified() == false && user.getPhone() != phone) {
             user.setPhone(phone);
             userRepository.save(user);
         }
-        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByUserAndTokenType(user, TokenType.PhoneVerificationOTP);
+        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByUserAndTokenType
+                (user, TokenType.PhoneVerificationOTP);
         if (verificationToken.isPresent()) {
             VerificationToken verToken = verificationToken.get();
-            if (LocalDateTime.now().isBefore(verToken.getCreatedAt().plusMinutes(2))) {
+            if (LocalDateTime.now().isBefore(verToken.getCreatedAt().plusMinutes(1))) {
                 throw new BackendException("Can't send another OTP now as its not been even 2 minutes " +
                         "when we sent the previous OTP on your number.");
             } else {
                 verificationTokenRepository.deleteById(verToken.getId());
             }
         }
-        smsService.sendOtp(user, TokenType.PhoneVerificationOTP, phone);
-        return "An OTP for phone verification is sent successfully on the provided number.";
+        Integer num = ThreadLocalRandom.current().nextInt(100001, 999999);
+        smsService.sendOtp(user, TokenType.PhoneVerificationOTP, phone, num);
+        //return "An OTP for phone verification is sent successfully on the provided number.";
+        /*
+            Actually we should return above response but since on production server we can't send otp.
+            So as temporary workaround we will return otp to the client and will display it on the screen to users.
+            So that they can complete the required steps and can proceed further.
+         */
+        return num.toString();
     }
 
     public String verifyMobileVerificationToken(Long userId, Long otp) {
@@ -165,15 +174,24 @@ public class UserService {
                 ("User with given id not found."));
         VerificationToken verificationToken = verificationTokenRepository.findByUserAndTokenType(user,
                 TokenType.PhoneVerificationOTP).orElseThrow(() -> new BackendException
-                ("User doesn't have requested any mobile verification token."));
-        if (verificationToken.getToken().equals(otp.toString())) {
+                ("User request token for mobile number updation not found."));
+        boolean isTokenExpired = verificationToken.getUpdatedAt().plusMinutes(15).isBefore(LocalDateTime.now());
+        if (verificationToken.getToken().equals(otp.toString()) && !isTokenExpired) {
             String phone = verificationToken.getUpdatingValue();
             user.setPhone(phone);
             user.setPhoneVerified(true);
             userRepository.save(user);
             verificationTokenRepository.deleteById(verificationToken.getId());
         } else {
-            throw new BackendException("Invalid OTP. Please check the OTP or resend again.");
+            if(isTokenExpired){
+                throw new BackendException("OTP expired. Please resend again.");
+            } else {
+                throw new BackendException("Invalid OTP. Please check the OTP or resend again.");
+            }
+        }
+        if(user.getOnboardingState() == 2){
+            user.setOnboardingState(3);
+            userRepository.save(user);
         }
         return "Mobile number verified and updated successfully.";
     }

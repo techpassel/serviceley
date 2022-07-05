@@ -4,7 +4,7 @@
 }
 
 .toast-success {
-    background-color: #20a50a !important;
+    background-color: #0ceb17 !important;
 }
 
 .toast-warning {
@@ -18,6 +18,11 @@
 .mat-form-field-appearance-fill .mat-form-field-flex {
     background-color: white !important;
     border: 1px solid black;
+}
+
+.toast-text {
+    font-size: 16px;
+    font-weight: 500;
 }
 
 @import "./styles-bootstrap.scss";

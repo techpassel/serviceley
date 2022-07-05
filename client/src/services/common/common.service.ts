@@ -24,7 +24,7 @@ export class CommonService {
     this.sessionObservableService.emitSessionEvent(false);
     this.authService.deleteSession(session).subscribe(
       (res: any) => {
-        console.log("Session deleted successfully.");
+        //console.log("Session deleted successfully.");
       }
     )
   }

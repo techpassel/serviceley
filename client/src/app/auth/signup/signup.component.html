@@ -4,13 +4,13 @@
         <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="form">
             <div class="name_inputs">
                 <div>
-                    <input type="text" placeholder="First name" formControlName="firstName" class="form_input">
+                    <input type="text" placeholder="First name" formControlName="firstName" class="form-input">
                     <div *ngIf="submitted && f.firstName.errors" class="error-text">
                         <div *ngIf="f.firstName.errors.required">First Name is required</div>
                     </div>
                 </div>
                 <div>
-                    <input type="text" placeholder="Last name" formControlName="lastName" class="form_input">
+                    <input type="text" placeholder="Last name" formControlName="lastName" class="form-input">
                     <div *ngIf="submitted && f.lastName.errors" class="error-text">
                         <div *ngIf="f.lastName.errors.required">Last Name is required</div>
                     </div>
@@ -18,7 +18,7 @@
             </div>
             <div>
                 <input type="text" (keyup)="onKeyUp('email')" placeholder="Email" formControlName="email"
-                    class="form_input">
+                    class="form-input">
                 <div *ngIf="submitted && f.email.errors" class="error-text">
                     <div *ngIf="f.email.errors.required">Email is required</div>
                     <div *ngIf="f.email.errors.email">Please enter a valid email address</div>
@@ -27,7 +27,7 @@
             </div>
             <div>
                 <input type="text" (keyup)="onKeyUp('phone')" placeholder="Mobile number" formControlName="phone"
-                    class="form_input">
+                    class="form-input">
                 <div *ngIf="submitted && f.phone.errors" class="error-text">
                     <div *ngIf="f.phone.errors.required">Mobile number is required</div>
                     <div *ngIf="f.phone.errors.minlength || f.phone.errors.maxlength">Mobile number must contain
@@ -36,7 +36,7 @@
                 <div *ngIf="phoneExists" class="error-text">This number is already registered.</div>
             </div>
             <div>
-                <input type="password" placeholder="Password" formControlName="password" class="form_input">
+                <input type="password" placeholder="Password" formControlName="password" class="form-input">
                 <div *ngIf="submitted && f.password.errors" class="error-text">
                     <div *ngIf="f.password.errors.required">Password is required</div>
                     <div *ngIf="f.password.errors.minlength">Password must be atleast 6 characters long</div>
@@ -44,7 +44,7 @@
             </div>
             <div>
                 <input type="password" (keyup)="onKeyUp('confirmPassword')" placeholder="Confirm password"
-                    formControlName="confirmPassword" class="form_input">
+                    formControlName="confirmPassword" class="form-input">
                 <div *ngIf="submitted && f.confirmPassword.errors" class="error-text">
                     <div *ngIf="f.confirmPassword.errors.required">Confirm Password is required</div>
                     <div *ngIf="f.confirmPassword.errors.minlength">Confirm Password must be atleast 6 characters long
