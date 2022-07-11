@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output } from '@angular/core';
+import { CommonService } from 'src/services/common/common.service';
 import { SessionObservableService } from 'src/services/observables-related/session-observable.service';
+import SessionUtil from 'src/utils/session.util';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,14 +10,22 @@ import { SessionObservableService } from 'src/services/observables-related/sessi
 })
 export class SidebarComponent implements OnInit {
   isSession!: boolean;
+  name = "";
+  userType = "";
+  
   constructor(
-    private sessionObservableService: SessionObservableService
+    private sessionObservableService: SessionObservableService,
+    private sessionUtil: SessionUtil,
+    private commonService: CommonService
   ) { }
 
   ngOnInit(): void {
     this.sessionObservableService.sessionEventListener().subscribe(info => {
       this.isSession = info;
-    })
+    });
+    const userData = this.sessionUtil.getSession();
+    this.name = userData.firstName + " " + userData.lastName;
+    this.userType = this.commonService.capitalizeFirstLetter(userData.userType);
   }
 
   @Output() sidebarClosed: EventEmitter<string> = new EventEmitter();

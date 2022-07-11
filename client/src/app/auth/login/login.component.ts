@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { LoginRequestData } from 'src/models/login-request-data';
 import { AuthService } from 'src/services/api-related/auth/auth.service';
@@ -14,7 +14,7 @@ import { SessionObservableService } from 'src/services/observables-related/sessi
   styleUrls: ['./login.component.scss', '../auth.component.scss']
 })
 export class LoginComponent implements OnInit {
-  signinForm!: FormGroup;
+  signinForm!: UntypedFormGroup;
   loginRequestData = new LoginRequestData();
   submitted: boolean = false;
   isProcessing: boolean = false;
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   appName = environment.appName;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private authService: AuthService,
     private toastr: ToastrUtil,
     private sessionUtil: SessionUtil,

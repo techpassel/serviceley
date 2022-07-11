@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Address } from 'src/models/address-data';
 import { OnboardingService } from 'src/services/api-related/onboarding/onboarding.service';
@@ -12,7 +12,7 @@ import ToastrUtil from 'src/utils/toastr.util';
   styleUrls: ['./address.component.scss', '../onboarding.component.scss']
 })
 export class AddressComponent implements OnInit {
-  addressForm!: FormGroup;
+  addressForm!: UntypedFormGroup;
   submitted = false;
   states = states;
   address!: Address;
@@ -20,7 +20,7 @@ export class AddressComponent implements OnInit {
   userId!: number;
   isProcessing = false;
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private sessionUtil: SessionUtil,
     private onboardingService: OnboardingService,
     private toastr: ToastrUtil,

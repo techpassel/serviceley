@@ -60,6 +60,7 @@ public class User extends CreateUpdateRecord{
     private boolean isEmailVerified = false;
 
     @Column(name= "usertype")
+    //@Enumerated(EnumType.STRING)
     private UserType userType;
 
     @Column(name = "onboarding_stage")

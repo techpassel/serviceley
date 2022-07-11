@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { UserData } from 'src/models/user-data';
 import { OnboardingService } from 'src/services/api-related/onboarding/onboarding.service';
 import SessionUtil from 'src/utils/session.util';
@@ -13,12 +13,12 @@ import ToastrUtil from 'src/utils/toastr.util';
   styleUrls: ['./user-details.component.scss', '../onboarding.component.scss']
 })
 export class UserDetailsComponent implements OnInit {
-  userDetailsForm!: FormGroup;
+  userDetailsForm!: UntypedFormGroup;
   submitted: boolean = false;
   isProcessing: boolean = false;
   userData!: UserData;
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private onboardingService: OnboardingService,
     private sessionUtil: SessionUtil,
     private router: Router,

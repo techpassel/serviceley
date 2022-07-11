@@ -11,6 +11,7 @@ export class AdminComponent implements OnInit {
   constructor(private authObservableService: AuthObservableService) { }
 
   ngOnInit(): void {
+    console.log("Coming in AdminComponent");
     this.authObservableService.emitAuthRouteEvent(false);
   }
 

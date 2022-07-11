@@ -23,7 +23,8 @@ const routes: Routes = [
         component: MobileVerificationComponent,
       },
     ]
-  }];
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

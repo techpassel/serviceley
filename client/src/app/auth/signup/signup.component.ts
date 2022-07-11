@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { SignupRequestData } from 'src/models/signup-request-data';
 import { AuthService } from 'src/services/api-related/auth/auth.service';
 import { CommonService } from 'src/services/common/common.service';
@@ -11,7 +11,7 @@ import ToastrUtil from 'src/utils/toastr.util';
   styleUrls: ['./signup.component.scss', '../auth.component.scss']
 })
 export class SignupComponent implements OnInit {
-  signupForm!: FormGroup;
+  signupForm!: UntypedFormGroup;
   submitted: boolean = false;
   isPasswordMismatched: boolean = false;
   isProcessing: boolean = false;
@@ -22,7 +22,7 @@ export class SignupComponent implements OnInit {
   user: SignupRequestData = new SignupRequestData();
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private commonService: CommonService,
     private authService: AuthService,
     private toastr: ToastrUtil
