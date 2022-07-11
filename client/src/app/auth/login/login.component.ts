@@ -57,6 +57,8 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl(onboardingStages[sessionData.onboardingStage])
           else
             this.router.navigateByUrl("/user");
+        } else if (sessionData.userType == "admin") {
+          this.router.navigateByUrl("/admin");
         }
       }
     })
