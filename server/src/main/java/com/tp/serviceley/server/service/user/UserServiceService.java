@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +37,15 @@ public class UserServiceService {
 
     public List<ServiceType> getServiceTypes(){
         return serviceTypeRepository.findAll();
+    }
+
+    public ServiceType getServiceTypeDetails(Long id){
+        return serviceTypeRepository.findById(id).orElseThrow(() -> new BackendException("Service type does not exist."));
+    }
+
+    public Boolean isServiceExist(String type) {
+        Optional<ServiceType> serviceType = serviceTypeRepository.findByType(type);
+        return serviceType.isPresent();
     }
 
     public List<DtoServiceSubtype> getServiceSubtypes(Long typeId){

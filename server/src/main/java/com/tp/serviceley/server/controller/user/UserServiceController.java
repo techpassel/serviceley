@@ -16,10 +16,32 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserServiceController {
     private final UserServiceService userServiceService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/types")
+    @RequestMapping(method = RequestMethod.GET, value = "")
     public ResponseEntity<?> getServiceTypes(){
         try {
             return new ResponseEntity<>(userServiceService.getServiceTypes(), HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public ResponseEntity<?> getServiceTypeDetails(@PathVariable Long id){
+        try {
+            return new ResponseEntity<>(userServiceService.getServiceTypeDetails(id), HttpStatus.OK);
+        } catch (BackendException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>("Some error occurred. Please try again.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/check/{serviceTypeName}")
+    public ResponseEntity<?> isServiceExist(@PathVariable("serviceTypeName") String serviceType){
+        try {
+            return new ResponseEntity<>(userServiceService.isServiceExist(serviceType), HttpStatus.OK);
         } catch (BackendException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e){

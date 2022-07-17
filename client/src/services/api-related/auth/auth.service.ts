@@ -18,7 +18,7 @@ const headers = new HttpHeaders(
   providedIn: 'root'
 })
 //The @Injectable() decorator specifies that Angular can use this class in the DI(Dependency injection) system. 
-//The metadata, providedIn: 'root', means that the HeroService is visible throughout the application.
+//The metadata, providedIn: 'root', means that the AuthService is visible throughout the application.
 export class AuthService {
 
   baseApiUrl: string = environment.baseApiUrl;
@@ -29,11 +29,11 @@ export class AuthService {
   //To use HttpClient, first we need to import the Angular HttpClientModule in the root AppModule(Check AppModule for details).
 
   login(loginRequestData: LoginRequestData): any {
-    return this.http.post(this.baseApiUrl + '/auth/login', loginRequestData, { headers });
+    return this.http.post(this.baseApiUrl + '/auth/login', loginRequestData);
   }
 
   signup(signupRequestData: SignupRequestData): any {
-    return this.http.post(this.baseApiUrl + '/auth/signup', signupRequestData, { headers, responseType: 'text' });
+    return this.http.post(this.baseApiUrl + '/auth/signup', signupRequestData, { responseType: 'text' });
   }
 
   resendActivationEmail(username: string): any {

@@ -1,1 +1,23 @@
-<p>add-service works!</p>
+<div class="container">
+    <div class="title" *ngIf></div>
+    <form #serviceForm="ngForm" (ngSubmit)="onSubmit()">
+        <div>
+            <label for="serviceName">Service Name : </label>&nbsp;
+            <input type="text" id="serviceName" name="service" #service="ngModel" required minlength="4"
+                [uniqueServiceTypeValidator]="initialServiceName" [(ngModel)]="serviceType.type" />
+            <div *ngIf="service.touched && service.errors" class="error-text">
+                <!-- {{service.errors | json}} -->
+                <div *ngIf="service.errors.required">
+                    Service name is required.
+                </div>
+                <div *ngIf="service.errors.minlength">
+                    Service name must be atleast 4 characters long.
+                </div>
+                <div *ngIf="service.errors.serviceExist">
+                    Service name already exist.
+                </div>
+            </div>
+        </div>
+        <button class="submit">Submit</button>
+    </form>
+</div>
